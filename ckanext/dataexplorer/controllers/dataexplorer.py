@@ -44,15 +44,28 @@ class DataExplorer(base.BaseController):
             data = json.loads(data_dict['extract_data'])
             format = data.pop('format')
 
-            resource_data_info = self._get_action('datastore_info', {'id': data['resource_id']})
             resource_meta = self._get_action('resource_show', {'id': data['resource_id']})
             name =  resource_meta.get('name', "extract")
 
-            for key in resource_data_info['schema']:
-                columns.append(key)
-
             try:
                 resource_data = self._get_action('datastore_search', data)
+
+                for key in resource_data['fields']:
+                    columns.append(key['id'])
+
+                try:
+                    columns.remove('_id')
+                except ValueError:
+                    pass
+                try:
+                    columns.remove('_full_count')
+                except ValueError:
+                    pass
+                try:
+                    columns.remove('rank')
+                except ValueError:
+                    pass
+
             except ObjectNotFound:
                 abort(404, _('DataStore resource not found'))
 
