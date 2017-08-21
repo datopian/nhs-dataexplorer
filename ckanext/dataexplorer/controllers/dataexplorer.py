@@ -45,7 +45,8 @@ class DataExplorer(base.BaseController):
             format = data.pop('format')
 
             resource_data_info = self._get_action('datastore_info', {'id': data['resource_id']})
-            print resource_data_info
+            resource_meta = self._get_action('resource_show', {'id': data['resource_id']})
+            name =  resource_meta.get('name', "extract")
 
             for key in resource_data_info['schema']:
                 columns.append(key)
@@ -59,7 +60,8 @@ class DataExplorer(base.BaseController):
                 writer.write_to_file(columns,
                                      resource_data.get('records'),
                                      format,
-                                     response)
+                                     response,
+                                     name)
             except ValidationError:
                 abort(400, _(
                     u'Format: must be one of %s') % u', '.join(DUMP_FORMATS))

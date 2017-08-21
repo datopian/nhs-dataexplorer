@@ -76,9 +76,7 @@ class JSONWriter(object):
 
 
 class FileWriterService():
-    def _csv_writer(self, columns, records, response):
-
-        name = 'test'
+    def _csv_writer(self, columns, records, response, name):
 
         if hasattr(response, u'headers'):
             response.headers['Content-Type'] = b'text/csv; charset=utf-8'
@@ -96,10 +94,7 @@ class FileWriterService():
         for record in records:
             writer.writerow([record[column] for column in columns])
 
-    def _json_writer(self, columns, records, response):
-
-        output = cStringIO.StringIO()
-        name = 'test'
+    def _json_writer(self, columns, records, response, name):
 
         if hasattr(response, u'headers'):
             response.headers['Content-Type'] = (
@@ -122,9 +117,7 @@ class FileWriterService():
 
         response.write(b'\n]}\n')
 
-    def _xml_writer(self, columns, records, response):
-
-        name = 'test'
+    def _xml_writer(self, columns, records, response, name):
 
         if hasattr(response, u'headers'):
             response.headers['Content-Type'] = (
@@ -145,10 +138,9 @@ class FileWriterService():
 
         response.write(b'</data>\n')
 
-    def _xlsx_writer(self, columns, records, response):
+    def _xlsx_writer(self, columns, records, response, name):
 
         output = cStringIO.StringIO()
-        name = 'test'
 
         if hasattr(response, u'headers'):
             response.headers['Content-Type'] = (
@@ -179,16 +171,16 @@ class FileWriterService():
         workbook.close()
         response.write(output.getvalue())
 
-    def write_to_file(self, columns, records, format, response):
+    def write_to_file(self, columns, records, format, response, name):
 
         format = format.lower()
         if format == 'csv':
-            return self._csv_writer(columns, records, response)
+            return self._csv_writer(columns, records, response, name)
         if format == 'json':
-            return self._json_writer(columns, records, response)
+            return self._json_writer(columns, records, response, name)
         if format == 'xml':
-            return self._xml_writer(columns, records, response)
+            return self._xml_writer(columns, records, response, name)
         if format == 'xlsx':
-            return self._xlsx_writer(columns, records, response)
+            return self._xlsx_writer(columns, records, response, name)
         raise l.ValidationError(_(
             u'format: must be one of %s') % u', '.join(DUMP_FORMATS))
