@@ -76,12 +76,9 @@ To install ckanext-dataexplorer:
 Config Settings
 ---------------
 
-Document any optional config settings here. For example::
+Set extractor rows limit, default is 30000::
 
-    # The minimum number of hours to wait before re-checking a resource
-    # (optional, default: 24).
-    ckanext.dataexplorer.some_setting = some_default_value
-
+    ckanext.dataexplorer.extract_rows_limit = 10000
 
 ------------------------
 Development Installation
