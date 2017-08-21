@@ -45,7 +45,7 @@ class DataExplorer(base.BaseController):
             format = data.pop('format')
 
             resource_meta = self._get_action('resource_show', {'id': data['resource_id']})
-            name =  resource_meta.get('name', "extract")
+            name =  resource_meta.get('name', "extract").replace(' ', '_')
 
             try:
                 resource_data = self._get_action('datastore_search', data)
