@@ -4494,6 +4494,7 @@ my.Extractor = Backbone.View.extend({
     query.resource_id = self.model.id;
     query.limit = 30000;
     query.format = format;
+    query.offset = 0;
     var input = this.$el.find('.extract-data-input').val(JSON.stringify(query));
 
     var endpoint = self.model.attributes.endpoint
