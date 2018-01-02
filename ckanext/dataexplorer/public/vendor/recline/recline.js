@@ -2716,6 +2716,14 @@ my.MultiView = Backbone.View.extend({
     this.listenTo(this.model, 'query:done', function() {
       self.clearNotifications();
       self.$el.find('.doc-count').text(self.model.recordCount || 'Unknown');
+      var from = parseInt(this.model.queryState.get('from'))+1;
+      var to = Math.min(from+this.model.queryState.get('size'), this.model.recordCount);
+      if (this.model.recordCount == undefined){
+        from = 0;
+        to = 0;
+        self.$el.find('input[name=from]').val(from);
+      }
+      self.$el.find('input[name=to]').val(to);
     });
     this.listenTo(this.model, 'query:fail', function(error) {
       self.clearNotifications();
