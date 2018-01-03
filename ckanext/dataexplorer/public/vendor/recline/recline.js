@@ -2716,7 +2716,7 @@ my.MultiView = Backbone.View.extend({
     this.listenTo(this.model, 'query:done', function() {
       self.clearNotifications();
       self.$el.find('.doc-count').text(self.model.recordCount || 'Unknown');
-      var from = parseInt(this.model.queryState.get('from'))+1;
+      var from = parseInt(this.model.queryState.get('from'));
       var to = Math.min(from+this.model.queryState.get('size'), this.model.recordCount);
       if (this.model.recordCount == undefined){
         from = 0;
