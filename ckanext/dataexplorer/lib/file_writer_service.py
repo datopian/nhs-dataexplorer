@@ -19,7 +19,7 @@ from ckan.common import _
 from ckanext.dataexplorer.helpers import CustomJSONEncoder
 
 
-DUMP_FORMATS = 'csv', 'json', 'xml', 'xlsx'
+DUMP_FORMATS = 'csv', 'json', 'xml', 'tsv'
 
 UTF8_BOM = u'\uFEFF'.encode(u'utf-8')
 
@@ -76,6 +76,24 @@ class JSONWriter(object):
 
 
 class FileWriterService():
+    def _tsv_writer(self, columns, records, response, name):
+
+        if hasattr(response, u'headers'):
+            response.headers['Content-Type'] = b'text/tsv; charset=utf-8'
+            if name:
+                response.headers['Content-disposition'] = (
+                    b'attachment; filename="{name}.tsv"'.format(
+                        name=name.encode('utf-8')))
+
+        writer = csv.writer(response, delimiter='\t')
+
+        # Writing headers
+        writer.writerow([c.encode("utf-8") for c in columns])
+
+        # Writing records
+        for record in records:
+            writer.writerow([record[column] for column in columns])
+
     def _csv_writer(self, columns, records, response, name):
 
         if hasattr(response, u'headers'):
@@ -180,7 +198,7 @@ class FileWriterService():
             return self._json_writer(columns, records, response, name)
         if format == 'xml':
             return self._xml_writer(columns, records, response, name)
-        if format == 'xlsx':
-            return self._xlsx_writer(columns, records, response, name)
+        if format == 'tsv':
+            return self._tsv_writer(columns, records, response, name)
         raise l.ValidationError(_(
             u'format: must be one of %s') % u', '.join(DUMP_FORMATS))

@@ -4469,9 +4469,9 @@ my.Extractor = Backbone.View.extend({
           <label>Format</label> \
           <select class="select-format form-control"> \
             <option value="csv">CSV</option> \
+            <option value="tsv">TSV</option> \
             <option value="xml">XML</option> \
             <option value="json">JSON</option> \
-            <option value="xlsx">XLSX</option> \
           </select> \
           <input class="form-control extract-data-input" type="hidden" id="extract_data" name="extract_data" value=""> \
         </fieldset> \
