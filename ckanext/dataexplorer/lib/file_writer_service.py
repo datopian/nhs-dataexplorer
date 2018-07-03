@@ -83,7 +83,7 @@ class FileWriterService():
             if name:
                 response.headers['Content-disposition'] = (
                     b'attachment; filename="{name}.csv"'.format(
-                        name=encode_rfc2231(name)))
+                        name=name.encode('utf-8')))
 
         writer = csv.writer(response, delimiter=',')
 
@@ -102,7 +102,7 @@ class FileWriterService():
             if name:
                 response.headers['Content-disposition'] = (
                     b'attachment; filename="{name}.json"'.format(
-                        name=encode_rfc2231(name)))
+                        name=name.encode('utf-8')))
 
         response.write(
             b'{\n  "fields": %s,\n  "records": [' % json.dumps(
@@ -125,7 +125,7 @@ class FileWriterService():
             if name:
                 response.headers['Content-disposition'] = (
                     b'attachment; filename="{name}.xml"'.format(
-                        name=encode_rfc2231(name)))
+                        name=name.encode('utf-8')))
 
         response.write(b'<data>\n')
 
@@ -148,7 +148,7 @@ class FileWriterService():
             if name:
                 response.headers['Content-disposition'] = (
                     b'attachment; filename="{name}.xlsx"'.format(
-                        name=encode_rfc2231(name)))
+                        name=name.encode('utf-8')))
 
         workbook = Workbook(output)
         worksheet = workbook.add_worksheet()
