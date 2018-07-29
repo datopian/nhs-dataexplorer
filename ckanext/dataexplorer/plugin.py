@@ -5,6 +5,7 @@ from logging import getLogger
 from ckan.common import json, config
 import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
+from ckan.lib.plugins import DefaultTranslation
 
 log = getLogger(__name__)
 ignore_empty = p.toolkit.get_validator('ignore_empty')
@@ -52,7 +53,7 @@ def datastore_fields(resource, valid_field_types):
             if f['type'] in valid_field_types]
 
 
-class ReclineViewBase(p.SingletonPlugin):
+class ReclineViewBase(p.SingletonPlugin, DefaultTranslation):
     '''
     This base class for the Recline view extensions.
     '''
@@ -60,6 +61,7 @@ class ReclineViewBase(p.SingletonPlugin):
     p.implements(p.IResourceView, inherit=True)
     p.implements(p.ITemplateHelpers, inherit=True)
     p.implements(p.IRoutes, inherit=True)
+    p.implements(p.ITranslation)
 
     def update_config(self, config):
         '''

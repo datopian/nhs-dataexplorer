@@ -1,0 +1,151 @@
+# Albanian translations for ckanext-dataexplorer.
+# Copyright (C) 2018 ORGANIZATION
+# This file is distributed under the same license as the
+# ckanext-dataexplorer
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ckanext-dataexplorer 0.0.1\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2018-07-06 11:26+0200\n"
+"PO-Revision-Date: 2018-07-29 22:30+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: sq\n"
+"Language-Team: sq <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: ckanext/dataexplorer/plugin.py:113
+msgid "Data Explorer"
+msgstr "Të dhënat eksploruese"
+
+#: ckanext/dataexplorer/plugin.py:140
+msgid "Table"
+msgstr "Tabela"
+
+#: ckanext/dataexplorer/plugin.py:183
+#: ckanext/dataexplorer/public/recline_view.js:199
+#: ckanext/dataexplorer/public/recline_view.min.js:14
+msgid "Graph"
+msgstr "Grafi"
+
+#: ckanext/dataexplorer/plugin.py:243
+#: ckanext/dataexplorer/public/recline_view.js:206
+#: ckanext/dataexplorer/public/recline_view.min.js:14
+msgid "Map"
+msgstr "Harta"
+
+#: ckanext/dataexplorer/controllers/dataexplorer.py:71
+msgid "DataStore resource not found"
+msgstr "Datastore burimi i të dhënave nuk u gjet"
+
+#: ckanext/dataexplorer/controllers/dataexplorer.py:80
+#, python-format
+msgid "Format: must be one of %s"
+msgstr "Format: duhet të jetë një nga %s"
+
+#: ckanext/dataexplorer/lib/file_writer_service.py:203
+#, python-format
+msgid "format: must be one of %s"
+msgstr "format: duhet të jetë një nga %s"
+
+#: ckanext/dataexplorer/public/recline_view.js:28
+#: ckanext/dataexplorer/public/recline_view.min.js:1
+msgid "error loading view"
+msgstr "gabim gjatë ngarkimit të pamjes"
+
+#: ckanext/dataexplorer/public/recline_view.js:74
+#: ckanext/dataexplorer/public/recline_view.min.js:5
+msgid "Could not load view"
+msgstr "Nuk mund të ngarkonte pamjen"
+
+#: ckanext/dataexplorer/public/recline_view.js:76
+#: ckanext/dataexplorer/public/recline_view.min.js:5
+msgid "DataStore returned an error"
+msgstr "DataStore u kthye në një gabim"
+
+#: ckanext/dataexplorer/public/recline_view.js:78
+#: ckanext/dataexplorer/public/recline_view.min.js:5
+msgid "DataProxy returned an error"
+msgstr "DataProxy u kthye në një gabim"
+
+#: ckanext/dataexplorer/public/recline_view.js:192
+#: ckanext/dataexplorer/public/recline_view.min.js:14
+msgid "Grid"
+msgstr "Rrjet"
+
+#: ckanext/dataexplorer/public/recline_view.js:214
+#: ckanext/dataexplorer/public/recline_view.min.js:14
+msgid "Filters"
+msgstr "Filterët"
+
+#: ckanext/dataexplorer/public/recline_view.js:221
+#: ckanext/dataexplorer/public/recline_view.min.js:14
+msgid "Extract"
+msgstr "Ekstrakt"
+
+#: ckanext/dataexplorer/templates/recline_graph_form.html:3
+#: ckanext/dataexplorer/templates/recline_map_form.html:3
+msgid "Row offset"
+msgstr "Rresht i mënjanuar"
+
+#: ckanext/dataexplorer/templates/recline_graph_form.html:3
+#: ckanext/dataexplorer/templates/recline_map_form.html:3
+msgid "eg: 0"
+msgstr "p.sh: 0"
+
+#: ckanext/dataexplorer/templates/recline_graph_form.html:4
+#: ckanext/dataexplorer/templates/recline_map_form.html:4
+msgid "Number of rows"
+msgstr "Numri i rreshtave"
+
+#: ckanext/dataexplorer/templates/recline_graph_form.html:4
+#: ckanext/dataexplorer/templates/recline_map_form.html:4
+msgid "eg: 100"
+msgstr "p.sh.: 100"
+
+#: ckanext/dataexplorer/templates/recline_graph_form.html:6
+msgid "Graph type"
+msgstr "Lloji i grafit"
+
+#: ckanext/dataexplorer/templates/recline_graph_form.html:7
+msgid "Group (Axis 1)"
+msgstr "Grupi (boshti 1)"
+
+#: ckanext/dataexplorer/templates/recline_graph_form.html:8
+msgid "Series (Axis 2)"
+msgstr "Seritë (boshti 2)"
+
+#: ckanext/dataexplorer/templates/recline_map_form.html:6
+msgid "Field type"
+msgstr "Lloji i fushës"
+
+#: ckanext/dataexplorer/templates/recline_map_form.html:7
+msgid "Latitude field"
+msgstr "Fusha e gjerësisë"
+
+#: ckanext/dataexplorer/templates/recline_map_form.html:8
+msgid "Longitude field"
+msgstr "Fusha e gjatësisë"
+
+#: ckanext/dataexplorer/templates/recline_map_form.html:9
+msgid "GeoJSON field"
+msgstr "Fusha GeoJSON"
+
+#: ckanext/dataexplorer/templates/recline_map_form.html:10
+msgid "Auto zoom to features"
+msgstr "Zmadhim automatik tek tiparet"
+
+#: ckanext/dataexplorer/templates/recline_map_form.html:11
+msgid "Cluster markers"
+msgstr "Tregjet thërrmuese"
+
+#: ckanext/dataexplorer/templates/recline_view.html:14
+msgid "Loading..."
+msgstr "Duke u ngarkuar..."
+
