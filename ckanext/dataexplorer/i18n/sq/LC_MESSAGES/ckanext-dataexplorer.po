@@ -10,15 +10,16 @@ msgstr ""
 "Project-Id-Version: ckanext-dataexplorer 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2018-07-06 11:26+0200\n"
-"PO-Revision-Date: 2018-07-29 22:30+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2018-08-07 23:28+0200\n"
 "Language: sq\n"
 "Language-Team: sq <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
+"Last-Translator: \n"
+"X-Generator: Poedit 2.0.4\n"
 
 #: ckanext/dataexplorer/plugin.py:113
 msgid "Data Explorer"
@@ -32,7 +33,7 @@ msgstr "Tabela"
 #: ckanext/dataexplorer/public/recline_view.js:199
 #: ckanext/dataexplorer/public/recline_view.min.js:14
 msgid "Graph"
-msgstr "Grafi"
+msgstr "Grafiku"
 
 #: ckanext/dataexplorer/plugin.py:243
 #: ckanext/dataexplorer/public/recline_view.js:206
@@ -42,17 +43,17 @@ msgstr "Harta"
 
 #: ckanext/dataexplorer/controllers/dataexplorer.py:71
 msgid "DataStore resource not found"
-msgstr "Datastore burimi i të dhënave nuk u gjet"
+msgstr "Brimi i setit të të dhënave nuk u gjet"
 
 #: ckanext/dataexplorer/controllers/dataexplorer.py:80
 #, python-format
 msgid "Format: must be one of %s"
-msgstr "Format: duhet të jetë një nga %s"
+msgstr "Formati: duhet të jetë një nga %s"
 
 #: ckanext/dataexplorer/lib/file_writer_service.py:203
 #, python-format
 msgid "format: must be one of %s"
-msgstr "format: duhet të jetë një nga %s"
+msgstr "formati: duhet të jetë një nga %s"
 
 #: ckanext/dataexplorer/public/recline_view.js:28
 #: ckanext/dataexplorer/public/recline_view.min.js:1
@@ -62,12 +63,12 @@ msgstr "gabim gjatë ngarkimit të pamjes"
 #: ckanext/dataexplorer/public/recline_view.js:74
 #: ckanext/dataexplorer/public/recline_view.min.js:5
 msgid "Could not load view"
-msgstr "Nuk mund të ngarkonte pamjen"
+msgstr "Nuk mund të ngarkohet pamja"
 
 #: ckanext/dataexplorer/public/recline_view.js:76
 #: ckanext/dataexplorer/public/recline_view.min.js:5
 msgid "DataStore returned an error"
-msgstr "DataStore u kthye në një gabim"
+msgstr "Seti I të dhënaveu kthye në një gabim"
 
 #: ckanext/dataexplorer/public/recline_view.js:78
 #: ckanext/dataexplorer/public/recline_view.min.js:5
@@ -82,7 +83,7 @@ msgstr "Rrjet"
 #: ckanext/dataexplorer/public/recline_view.js:214
 #: ckanext/dataexplorer/public/recline_view.min.js:14
 msgid "Filters"
-msgstr "Filterët"
+msgstr "Filtra"
 
 #: ckanext/dataexplorer/public/recline_view.js:221
 #: ckanext/dataexplorer/public/recline_view.min.js:14
@@ -111,7 +112,7 @@ msgstr "p.sh.: 100"
 
 #: ckanext/dataexplorer/templates/recline_graph_form.html:6
 msgid "Graph type"
-msgstr "Lloji i grafit"
+msgstr "Lloji i grafikut"
 
 #: ckanext/dataexplorer/templates/recline_graph_form.html:7
 msgid "Group (Axis 1)"
@@ -127,11 +128,11 @@ msgstr "Lloji i fushës"
 
 #: ckanext/dataexplorer/templates/recline_map_form.html:7
 msgid "Latitude field"
-msgstr "Fusha e gjerësisë"
+msgstr "Gjerësia e fushës"
 
 #: ckanext/dataexplorer/templates/recline_map_form.html:8
 msgid "Longitude field"
-msgstr "Fusha e gjatësisë"
+msgstr "Gjatësia e fushës"
 
 #: ckanext/dataexplorer/templates/recline_map_form.html:9
 msgid "GeoJSON field"
@@ -139,13 +140,12 @@ msgstr "Fusha GeoJSON"
 
 #: ckanext/dataexplorer/templates/recline_map_form.html:10
 msgid "Auto zoom to features"
-msgstr "Zmadhim automatik tek tiparet"
+msgstr "Zmadhim automatik tek veçoritë"
 
 #: ckanext/dataexplorer/templates/recline_map_form.html:11
 msgid "Cluster markers"
-msgstr "Tregjet thërrmuese"
+msgstr "Grumbullimi i shënimeve"
 
 #: ckanext/dataexplorer/templates/recline_view.html:14
 msgid "Loading..."
 msgstr "Duke u ngarkuar..."
-
