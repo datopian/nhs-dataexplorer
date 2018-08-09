@@ -4506,9 +4506,17 @@ my.Extractor = Backbone.View.extend({
     var input = this.$el.find('.extract-data-input').val(JSON.stringify(query));
 
     var endpoint = self.model.attributes.endpoint
-    var parts = endpoint.split('/');
-    parts.splice(-1, 1)
-    var action = parts.join('/') + '/dataexplorer/extract'
+    var action = ''
+    if (!endpoint) {
+      // try the site URL as endpoint
+      endpoint = self.options.site_url
+      action = endpoint + 'dataexplorer/extract'
+    }else{
+      var parts = endpoint.split('/');
+      parts.splice(-1, 1)
+      action = parts.join('/') + '/dataexplorer/extract'
+    }
+
     var form = this.$el.find('.select-format-form').attr('action', action);
     form.submit();
   }

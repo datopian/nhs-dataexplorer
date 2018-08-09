@@ -220,7 +220,8 @@ this.ckan.module('recline_view', function (jQuery, _) {
           id: 'extractor',
           label: _('Extract').fetch(),
           view: new recline.View.Extractor({
-            model: dataset
+            model: dataset,
+            site_url: this.options.site_url
           })
         }
       ];
