@@ -107,7 +107,7 @@ class ReclineView(ReclineViewBase):
     '''
 
     def info(self):
-        return {'name': 'recline_view',
+        return {'name': 'dataexplorer',
                 'title': 'Data Explorer',
                 'filterable': True,
                 'icon': 'table',
