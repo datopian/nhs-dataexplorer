@@ -6,12 +6,29 @@ this.ckan.module('recline_view', function (jQuery, _) {
     },
 
     initialize: function () {
+      function loadScript(url, callback)
+      {
+        var head = document.getElementsByTagName('head')[0];
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = url;
+
+        script.onreadystatechange = callback;
+        script.onload = callback;
+
+        head.appendChild(script);
+    }
+    var scriptLoaded = function() {
       jQuery.proxyAll(this, /_on/);
       this.options.resource = JSON.parse(this.options.resource);
       this.options.resourceView = JSON.parse(this.options.resourceView);
       this.el.ready(this._onReady);
       // hack to make leaflet use a particular location to look for images
       L.Icon.Default.imagePath = this.options.site_url + 'vendor/leaflet/0.7.7/images';
+   }.bind(this);
+
+   // Dynamically load the goodtables-ui script so that strings located there can be translated
+   loadScript('/vendor/recline/recline.js', scriptLoaded)
     },
 
     _onReady: function() {

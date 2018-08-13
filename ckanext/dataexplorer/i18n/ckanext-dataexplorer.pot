@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dataexplorer 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-07-06 11:26+0200\n"
+"POT-Creation-Date: 2018-08-13 08:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,22 +18,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: ckanext/dataexplorer/plugin.py:113
+#: ckanext/dataexplorer/plugin.py:115
 msgid "Data Explorer"
 msgstr ""
 
-#: ckanext/dataexplorer/plugin.py:140
+#: ckanext/dataexplorer/plugin.py:142
 msgid "Table"
 msgstr ""
 
-#: ckanext/dataexplorer/plugin.py:183
-#: ckanext/dataexplorer/public/recline_view.js:199
+#: ckanext/dataexplorer/plugin.py:185
+#: ckanext/dataexplorer/public/recline_view.js:216
 #: ckanext/dataexplorer/public/recline_view.min.js:14
 msgid "Graph"
 msgstr ""
 
-#: ckanext/dataexplorer/plugin.py:243
-#: ckanext/dataexplorer/public/recline_view.js:206
+#: ckanext/dataexplorer/plugin.py:245
+#: ckanext/dataexplorer/public/recline_view.js:223
 #: ckanext/dataexplorer/public/recline_view.min.js:14
 msgid "Map"
 msgstr ""
@@ -52,39 +52,170 @@ msgstr ""
 msgid "format: must be one of %s"
 msgstr ""
 
-#: ckanext/dataexplorer/public/recline_view.js:28
+#: ckanext/dataexplorer/public/recline_view.js:45
 #: ckanext/dataexplorer/public/recline_view.min.js:1
 msgid "error loading view"
 msgstr ""
 
-#: ckanext/dataexplorer/public/recline_view.js:74
+#: ckanext/dataexplorer/public/recline_view.js:91
 #: ckanext/dataexplorer/public/recline_view.min.js:5
 msgid "Could not load view"
 msgstr ""
 
-#: ckanext/dataexplorer/public/recline_view.js:76
+#: ckanext/dataexplorer/public/recline_view.js:93
 #: ckanext/dataexplorer/public/recline_view.min.js:5
 msgid "DataStore returned an error"
 msgstr ""
 
-#: ckanext/dataexplorer/public/recline_view.js:78
+#: ckanext/dataexplorer/public/recline_view.js:95
 #: ckanext/dataexplorer/public/recline_view.min.js:5
 msgid "DataProxy returned an error"
 msgstr ""
 
-#: ckanext/dataexplorer/public/recline_view.js:192
+#: ckanext/dataexplorer/public/recline_view.js:209
 #: ckanext/dataexplorer/public/recline_view.min.js:14
 msgid "Grid"
 msgstr ""
 
-#: ckanext/dataexplorer/public/recline_view.js:214
+#: ckanext/dataexplorer/public/recline_view.js:231
 #: ckanext/dataexplorer/public/recline_view.min.js:14
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4360
 msgid "Filters"
 msgstr ""
 
-#: ckanext/dataexplorer/public/recline_view.js:221
+#: ckanext/dataexplorer/public/recline_view.js:238
 #: ckanext/dataexplorer/public/recline_view.min.js:14
 msgid "Extract"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1068
+msgid "Hey there!"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1069
+msgid ""
+"There's no graph here yet because we don't know what fields you'd like to see"
+" plotted."
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1070
+msgid ""
+"Please tell us by <strong>using the menu on the right</strong> and a graph "
+"will automatically appear."
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1409
+msgid "Graph Type"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1412
+msgid "Lines and Points"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1413
+msgid "Lines"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1414
+msgid "Points"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1415
+msgid "Bars"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1416
+msgid "Columns"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1421
+msgid "Group Column (Axis 1)"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1424
+msgid "Please choose ..."
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1435
+msgid "Add Series"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2345
+msgid "Latitude / Longitude fields"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2348
+#: ckanext/dataexplorer/templates/recline_map_form.html:9
+msgid "GeoJSON field"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2351
+#: ckanext/dataexplorer/templates/recline_map_form.html:7
+msgid "Latitude field"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2360
+#: ckanext/dataexplorer/templates/recline_map_form.html:8
+msgid "Longitude field"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2383
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4379
+msgid "Update"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2388
+#: ckanext/dataexplorer/templates/recline_map_form.html:10
+msgid "Auto zoom to features"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2391
+#: ckanext/dataexplorer/templates/recline_map_form.html:11
+msgid "Cluster markers"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2622
+msgid "records"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2718
+msgid "Unknown"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4318
+msgid "Search data ..."
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4321
+msgid "Go"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4361
+msgid "Add filter"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4364
+msgid "Field"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4371
+msgid "Add"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4466
+msgid "Extract & download"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4469
+msgid "Format"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4479
+msgid "Downloads are limited to the most recent 30000 rows"
+msgstr ""
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4480
+msgid "Download"
 msgstr ""
 
 #: ckanext/dataexplorer/templates/recline_graph_form.html:3
@@ -121,26 +252,6 @@ msgstr ""
 
 #: ckanext/dataexplorer/templates/recline_map_form.html:6
 msgid "Field type"
-msgstr ""
-
-#: ckanext/dataexplorer/templates/recline_map_form.html:7
-msgid "Latitude field"
-msgstr ""
-
-#: ckanext/dataexplorer/templates/recline_map_form.html:8
-msgid "Longitude field"
-msgstr ""
-
-#: ckanext/dataexplorer/templates/recline_map_form.html:9
-msgid "GeoJSON field"
-msgstr ""
-
-#: ckanext/dataexplorer/templates/recline_map_form.html:10
-msgid "Auto zoom to features"
-msgstr ""
-
-#: ckanext/dataexplorer/templates/recline_map_form.html:11
-msgid "Cluster markers"
 msgstr ""
 
 #: ckanext/dataexplorer/templates/recline_view.html:14

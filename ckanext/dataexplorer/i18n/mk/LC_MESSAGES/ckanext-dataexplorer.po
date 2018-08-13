@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-dataexplorer 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-07-06 11:26+0200\n"
+"POT-Creation-Date: 2018-08-13 08:39+0200\n"
 "PO-Revision-Date: 2018-07-06 11:29+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: mk\n"
@@ -20,22 +20,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: ckanext/dataexplorer/plugin.py:113
+#: ckanext/dataexplorer/plugin.py:115
 msgid "Data Explorer"
 msgstr "Прегледувач на податоци"
 
-#: ckanext/dataexplorer/plugin.py:140
+#: ckanext/dataexplorer/plugin.py:142
 msgid "Table"
 msgstr "Табела"
 
-#: ckanext/dataexplorer/plugin.py:183
-#: ckanext/dataexplorer/public/recline_view.js:199
+#: ckanext/dataexplorer/plugin.py:185
+#: ckanext/dataexplorer/public/recline_view.js:216
 #: ckanext/dataexplorer/public/recline_view.min.js:14
 msgid "Graph"
 msgstr "График"
 
-#: ckanext/dataexplorer/plugin.py:243
-#: ckanext/dataexplorer/public/recline_view.js:206
+#: ckanext/dataexplorer/plugin.py:245
+#: ckanext/dataexplorer/public/recline_view.js:223
 #: ckanext/dataexplorer/public/recline_view.min.js:14
 msgid "Map"
 msgstr "Мапа"
@@ -54,40 +54,175 @@ msgstr "Формат: мора да биде еден од %s"
 msgid "format: must be one of %s"
 msgstr "формат: мора да биде еден од %s"
 
-#: ckanext/dataexplorer/public/recline_view.js:28
+#: ckanext/dataexplorer/public/recline_view.js:45
 #: ckanext/dataexplorer/public/recline_view.min.js:1
 msgid "error loading view"
 msgstr "грешка при вчитување на приказ"
 
-#: ckanext/dataexplorer/public/recline_view.js:74
+#: ckanext/dataexplorer/public/recline_view.js:91
 #: ckanext/dataexplorer/public/recline_view.min.js:5
 msgid "Could not load view"
 msgstr "Приказот не може да се вчита"
 
-#: ckanext/dataexplorer/public/recline_view.js:76
+#: ckanext/dataexplorer/public/recline_view.js:93
 #: ckanext/dataexplorer/public/recline_view.min.js:5
 msgid "DataStore returned an error"
 msgstr "Податочното складиште врати грешка."
 
-#: ckanext/dataexplorer/public/recline_view.js:78
+#: ckanext/dataexplorer/public/recline_view.js:95
 #: ckanext/dataexplorer/public/recline_view.min.js:5
 msgid "DataProxy returned an error"
 msgstr "Податочното прокси врати грешка"
 
-#: ckanext/dataexplorer/public/recline_view.js:192
+#: ckanext/dataexplorer/public/recline_view.js:209
 #: ckanext/dataexplorer/public/recline_view.min.js:14
 msgid "Grid"
 msgstr "Мрежа"
 
-#: ckanext/dataexplorer/public/recline_view.js:214
+#: ckanext/dataexplorer/public/recline_view.js:231
 #: ckanext/dataexplorer/public/recline_view.min.js:14
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4360
 msgid "Filters"
 msgstr "Филтри"
 
-#: ckanext/dataexplorer/public/recline_view.js:221
+#: ckanext/dataexplorer/public/recline_view.js:238
 #: ckanext/dataexplorer/public/recline_view.min.js:14
 msgid "Extract"
 msgstr "Отпакувај"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1068
+msgid "Hey there!"
+msgstr "Здраво!"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1069
+msgid ""
+"There's no graph here yet because we don't know what fields you'd like to"
+" see plotted."
+msgstr ""
+"Тука сеуште не постои графикон, бидејќи не знаеме кои полиња би сакале да"
+" ги вклучите."
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1070
+msgid ""
+"Please tell us by <strong>using the menu on the right</strong> and a "
+"graph will automatically appear."
+msgstr ""
+"Ве молиме покажете ни со <strong> со помош на менито на десната "
+"страна</strong> и графиконот автоматски ќе се појави."
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1409
+msgid "Graph Type"
+msgstr "Тип на график"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1412
+msgid "Lines and Points"
+msgstr "Линии и точки"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1413
+msgid "Lines"
+msgstr "Линии"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1414
+msgid "Points"
+msgstr "Точки"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1415
+msgid "Bars"
+msgstr "Бар"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1416
+msgid "Columns"
+msgstr "Колони"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1421
+msgid "Group Column (Axis 1)"
+msgstr "Колона за група (Оска 1)"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1424
+msgid "Please choose ..."
+msgstr "Ве молиме изберете ..."
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:1435
+msgid "Add Series"
+msgstr "Додадете серија"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2345
+msgid "Latitude / Longitude fields"
+msgstr "Полиња за географска ширина / должина"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2348
+#: ckanext/dataexplorer/templates/recline_map_form.html:9
+msgid "GeoJSON field"
+msgstr "GeoJSON поле"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2351
+#: ckanext/dataexplorer/templates/recline_map_form.html:7
+msgid "Latitude field"
+msgstr "Поле за географска ширина"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2360
+#: ckanext/dataexplorer/templates/recline_map_form.html:8
+msgid "Longitude field"
+msgstr "Поле за географска должина"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2383
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4379
+msgid "Update"
+msgstr "Ажурирај"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2388
+#: ckanext/dataexplorer/templates/recline_map_form.html:10
+msgid "Auto zoom to features"
+msgstr "Автоматски зумирајте до одлики"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2391
+#: ckanext/dataexplorer/templates/recline_map_form.html:11
+msgid "Cluster markers"
+msgstr "Ознаки за кластер"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2622
+msgid "records"
+msgstr "записи"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:2718
+msgid "Unknown"
+msgstr "Непознато"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4318
+msgid "Search data ..."
+msgstr "Пребарај податоци ..."
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4321
+msgid "Go"
+msgstr "Оди"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4361
+msgid "Add filter"
+msgstr "Додади филтер"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4364
+msgid "Field"
+msgstr "Поле"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4371
+msgid "Add"
+msgstr "Додади"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4466
+msgid "Extract & download"
+msgstr "Отпакувај и преземи"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4469
+msgid "Format"
+msgstr "Формат"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4479
+msgid "Downloads are limited to the most recent 30000 rows"
+msgstr "Преземањата се ограничени на најскорешните 30000 редови"
+
+#: ckanext/dataexplorer/public/vendor/recline/recline.js:4480
+msgid "Download"
+msgstr "Преземи"
 
 #: ckanext/dataexplorer/templates/recline_graph_form.html:3
 #: ckanext/dataexplorer/templates/recline_map_form.html:3
@@ -125,27 +260,11 @@ msgstr "Серија (Оска 2)"
 msgid "Field type"
 msgstr "Тип на поле"
 
-#: ckanext/dataexplorer/templates/recline_map_form.html:7
-msgid "Latitude field"
-msgstr "Поле за географска ширина"
-
-#: ckanext/dataexplorer/templates/recline_map_form.html:8
-msgid "Longitude field"
-msgstr "Поле за географска должина"
-
-#: ckanext/dataexplorer/templates/recline_map_form.html:9
-msgid "GeoJSON field"
-msgstr "GeoJSON поле"
-
-#: ckanext/dataexplorer/templates/recline_map_form.html:10
-msgid "Auto zoom to features"
-msgstr "Автоматски зумирајте до одлики"
-
-#: ckanext/dataexplorer/templates/recline_map_form.html:11
-msgid "Cluster markers"
-msgstr "Маркери за кластер"
-
 #: ckanext/dataexplorer/templates/recline_view.html:14
 msgid "Loading..."
 msgstr "Се вчитува..."
+
+# | msgid "Update"
+#~ msgid "update"
+#~ msgstr "Ажурирај"
 
