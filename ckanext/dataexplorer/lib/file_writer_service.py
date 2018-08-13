@@ -9,6 +9,7 @@ import logging
 import json
 import csv
 import cStringIO
+import codecs
 
 import ckan.logic as l
 
@@ -75,6 +76,40 @@ class JSONWriter(object):
             cls=CustomJSONEncoder).encode('utf-8'))
 
 
+class UnicodeCSVWriter:
+    """
+    A CSV writer which will write rows to CSV file "f",
+    which is encoded in the given encoding.
+    """
+
+    def __init__(self, f, delimiter=',', encoding="utf-8", **kwds):
+        # Redirect output to a queue
+        self.queue = cStringIO.StringIO()
+        self.writer = csv.writer(self.queue, delimiter=delimiter, **kwds)
+        self.stream = f
+        self.encoder = codecs.getincrementalencoder(encoding)()
+
+    def writerow(self, row):
+        self.writer.writerow([self._as_str(s).encode("utf-8") for s in row])
+        # Fetch UTF-8 output from the queue ...
+        data = self.queue.getvalue()
+        data = data.decode("utf-8")
+        # ... and reencode it into the target encoding
+        data = self.encoder.encode(data)
+        # write to the target stream
+        self.stream.write(data)
+        # empty queue
+        self.queue.truncate(0)
+
+    def writerows(self, rows):
+        for row in rows:
+            self.writerow(row)
+    
+    def _as_str(self, s):
+        if isinstance(s, str) or isinstance(s, unicode):
+            return s
+        return str(s)
+
 class FileWriterService():
     def _tsv_writer(self, columns, records, response, name):
 
@@ -85,7 +120,7 @@ class FileWriterService():
                     b'attachment; filename="{name}.tsv"'.format(
                         name=name.encode('utf-8')))
 
-        writer = csv.writer(response, delimiter='\t')
+        writer = UnicodeCSVWriter(response, delimiter='\t')
 
         # Writing headers
         writer.writerow([c.encode("utf-8") for c in columns])
@@ -103,7 +138,7 @@ class FileWriterService():
                     b'attachment; filename="{name}.csv"'.format(
                         name=name.encode('utf-8')))
 
-        writer = csv.writer(response, delimiter=',')
+        writer = UnicodeCSVWriter(response, delimiter=',')
 
         # Writing headers
         writer.writerow([c.encode("utf-8") for c in columns])
