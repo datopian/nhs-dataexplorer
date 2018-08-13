@@ -112,7 +112,6 @@ msgstr ""
 "strong> dhe një grafik do të shfaqet automatikisht."
 
 #: ckanext/dataexplorer/public/vendor/recline/recline.js:1409
-#, fuzzy
 #| msgid "Graph type"
 msgid "Graph Type"
 msgstr "Lloji i grafikut"
@@ -138,7 +137,6 @@ msgid "Columns"
 msgstr "Kolonat"
 
 #: ckanext/dataexplorer/public/vendor/recline/recline.js:1421
-#, fuzzy
 #| msgid "Group (Axis 1)"
 msgid "Group Column (Axis 1)"
 msgstr "Grupi (boshti 1)"
@@ -152,7 +150,6 @@ msgid "Add Series"
 msgstr "Shto Seria"
 
 #: ckanext/dataexplorer/public/vendor/recline/recline.js:2345
-#, fuzzy
 #| msgid "Longitude field"
 msgid "Latitude / Longitude fields"
 msgstr "Gjatësia e fushës"
