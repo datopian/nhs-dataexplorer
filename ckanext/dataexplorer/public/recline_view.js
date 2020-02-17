@@ -134,7 +134,7 @@ this.ckan.module('recline_view', function (jQuery, _) {
 
         view = new recline.View.Map(this._reclineMapViewOptions(dataset, this.options.map_config));
       } else if(reclineView.view_type === "recline_view" || reclineView.view_type === "dataexplorer") {
-        view = this._newDataExplorer(dataset, this.options.map_config);
+        view = this._newDataExplorer(dataset, this.options.map_config, reclineView);
       } else {
         // default to Grid
         view = new recline.View.SlickGrid({model: dataset});
@@ -202,7 +202,7 @@ this.ckan.module('recline_view', function (jQuery, _) {
       };
     },
 
-    _newDataExplorer: function (dataset, map_config) {
+    _newDataExplorer: function (dataset, map_config, options) {
       var views = [
         {
           id: 'grid',
@@ -224,6 +224,10 @@ this.ckan.module('recline_view', function (jQuery, _) {
           view: new recline.View.Map(this._reclineMapViewOptions(dataset, map_config))
         }
       ];
+
+      views = views.filter(function(view) {
+        return options[view.id + '_tab'] === 'show'
+      });
 
       var sidebarViews = [
         {
