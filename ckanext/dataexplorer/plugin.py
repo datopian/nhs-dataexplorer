@@ -113,6 +113,10 @@ class ReclineView(ReclineViewBase):
                 'icon': 'table',
                 'requires_datastore': False,
                 'default_title': p.toolkit._('Data Explorer'),
+                'schema': {'grid_tab': [ignore_empty],
+                           'graph_tab': [ignore_empty],
+                           'map_tab': [ignore_empty],
+                          }
                 }
 
     def can_view(self, data_dict):
