@@ -108,11 +108,7 @@ body {
   *********************************************************/
 
 .recline-query-editor {
-  float: right;
-  height: 35px;
-  padding-right: 5px;
-  margin-right: 5px;
-  border-right: solid 2px #ddd;
+  display: none;
 }
 
 .header .input-prepend {
@@ -131,17 +127,6 @@ body {
 /* needed for FF but not chrome */
 .header .input-prepend {
   vertical-align: top;
-}
-
-.recline-query-editor form button {
-  vertical-align: top;
-}
-
-/* label for screen reader */
-.recline-query-editor .form-inline label {
-  position: absolute;
-  top:0;
-  left:-9999px
 }
 
 /**********************************************************
