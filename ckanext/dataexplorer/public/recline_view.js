@@ -58,14 +58,20 @@ this.ckan.module('recline_view', function (jQuery, _) {
       }
 
       var errorMsg, dataset, map_config;
-
+      /*
       if (!resourceData.datastore_active) {
-          recline.Backend.DataProxy.timeout = 10000;
+          recline.Backend.DataProxy.timeout = 1000000;
           resourceData.backend =  'dataproxy';
       } else {
           resourceData.backend =  'ckan';
           resourceData.endpoint = jQuery('body').data('site-root') + 'api';
       }
+      */
+      // Use only CKAN backend
+      resourceData.backend =  'ckan';
+      resourceData.endpoint = jQuery('body').data('site-root') + 'api';
+
+
 
       dataset = new recline.Model.Dataset(resourceData);
 
@@ -210,8 +216,9 @@ this.ckan.module('recline_view', function (jQuery, _) {
           view: new recline.View.SlickGrid({
             model: dataset
           })
-        },
-        {
+        }
+        /** NOT IN USE
+        ,{
           id: 'graph',
           label: _('Graph').fetch(),
           view: new recline.View.Graph({
@@ -223,6 +230,7 @@ this.ckan.module('recline_view', function (jQuery, _) {
           label: _('Map').fetch(),
           view: new recline.View.Map(this._reclineMapViewOptions(dataset, map_config))
         }
+        **/
       ];
 
       views = views.filter(function(view) {

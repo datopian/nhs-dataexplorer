@@ -413,6 +413,7 @@ my.Dataset = Backbone.Model.extend({
         this.backend = recline.Backend.Memory;
       }
     }
+    this.id = this.attributes.bq_table_name
     this.fields = new my.FieldList();
     this.records = new my.RecordList();
     this._changes = {
@@ -1831,6 +1832,7 @@ my.GridRow = Backbone.View.extend({
 this.recline = this.recline || {};
 this.recline.View = this.recline.View || {};
 
+/*** Map - IS NOT IN USE
 (function($, my) {
   "use strict";
 // ## Map view for a Dataset using Leaflet mapping library.
@@ -2509,7 +2511,11 @@ my.MapMenu = Backbone.View.extend({
 });
 
 })(jQuery, recline.View);
+
+END Map - IS NOT IN USE ****/
 /*jshint multistr:true */
+
+
 
 // Standard JS module setup
 this.recline = this.recline || {};
@@ -4499,7 +4505,8 @@ my.Extractor = Backbone.View.extend({
     e.preventDefault();
     var format = this.$el.find('.select-format').val();
     var query = CKAN._normalizeQuery(self.model.queryState.attributes);
-    query.resource_id = self.model.id;
+    query.ckan_resource_id = self.model.attributes.id;
+    query.resource_id = self.model.attributes.bq_table_name;
     query.limit = 30000;
     query.format = format;
     query.offset = 0;

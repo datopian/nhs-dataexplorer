@@ -238,10 +238,10 @@ recline.Backend.Ckan = recline.Backend.Ckan || {};
       wrapper = new CKAN.Client(dataset.endpoint);
     } else {
       var out = CKAN._parseCkanResourceUrl(dataset.url);
-      dataset.id = out.resource_id;
+      dataset.id = out.bq_table_name //out.resource_id;
       wrapper = new CKAN.Client(out.endpoint);
     }
-    queryObj.resource_id = dataset.id;
+    queryObj.resource_id = dataset.bq_table_name //dataset.id;
     wrapper.datastoreQuery(queryObj, function(err, out) {
       if (err) {
         dfd.reject(err);
