@@ -41,16 +41,18 @@ class DataExplorer(base.BaseController):
 
         if request.method == 'POST':
             data_dict = dict(request.POST)
+            log.info("extract - data_dict: {}".format(data_dict))
             data = json.loads(data_dict['extract_data'])
-            data['limit'] = config.get('ckanext.dataexplorer.extract_rows_limit', 30000)
+            data['limit'] = config.get('ckanext.dataexplorer.extract_rows_limit', 10000)
             format = data.pop('format')
 
-            resource_meta = self._get_action('resource_show', {'id': data['resource_id']})
+            resource_meta = self._get_action('resource_show', {'id': data['ckan_resource_id']})
             name =  resource_meta.get('name', "extract").replace(' ', '_')
 
             try:
+                log.info("extract - data: {}".format(data))
                 resource_data = self._get_action('datastore_search', data)
-
+                log.info("extract - resource_data: {}".format(resource_data))
                 for key in resource_data['fields']:
                     columns.append(key['id'])
 
