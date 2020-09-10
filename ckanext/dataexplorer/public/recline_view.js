@@ -58,15 +58,6 @@ this.ckan.module('recline_view', function (jQuery, _) {
       }
 
       var errorMsg, dataset, map_config;
-      /*
-      if (!resourceData.datastore_active) {
-          recline.Backend.DataProxy.timeout = 1000000;
-          resourceData.backend =  'dataproxy';
-      } else {
-          resourceData.backend =  'ckan';
-          resourceData.endpoint = jQuery('body').data('site-root') + 'api';
-      }
-      */
       // Use only CKAN backend
       resourceData.backend =  'ckan';
       resourceData.endpoint = jQuery('body').data('site-root') + 'api';
