@@ -2629,9 +2629,7 @@ my.MultiView = Backbone.View.extend({
       </div> \
       <div class="menu-right"> \
         <div class="btn-group" data-toggle="buttons-checkbox"> \
-          {{#sidebarViews}} \
-          <button href="#" data-action="{{id}}" class="btn btn-default">{{label}}</button> \
-          {{/sidebarViews}} \
+           <button href="#" data-action="extractor" class="btn btn-default">Extract</button> \
         </div> \
       </div> \
       <div class="query-editor-here" style="display:inline;"></div> \
@@ -4482,7 +4480,7 @@ my.Extractor = Backbone.View.extend({
           <input class="form-control extract-data-input" type="hidden" id="extract_data" name="extract_data" value=""> \
         </fieldset> \
         <br> \
-        <p><i class="icon-info-sign"></i> ' + ckan.i18n._('Downloads are limited to the most recent 30000 rows') + '</p> \
+        <p><i class="icon-info-sign"></i> ' + ckan.i18n._('Downloads are limited to the most recent 10000 rows') + '</p> \
         <button type="submit" class="btn extract-button">' + ckan.i18n._('Download') + '</button> \
       </form> \
     </div> \
