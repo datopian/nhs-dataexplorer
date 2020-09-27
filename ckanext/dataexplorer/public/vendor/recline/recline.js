@@ -2648,7 +2648,7 @@ my.MultiView = Backbone.View.extend({
     this._setupState(options.state);
 
     // Hash of 'page' views (i.e. those for whole page) keyed by page name
-    if (options.views) {
+    if (options.views.length > 0) {
       this.pageViews = options.views;
     } else {
       this.pageViews = [{
@@ -2657,27 +2657,6 @@ my.MultiView = Backbone.View.extend({
         view: new my.SlickGrid({
           model: this.model,
           state: this.state.get('view-grid')
-        })
-      }, {
-        id: 'graph',
-        label: 'Graph',
-        view: new my.Graph({
-          model: this.model,
-          state: this.state.get('view-graph')
-        })
-      }, {
-        id: 'map',
-        label: 'Map',
-        view: new my.Map({
-          model: this.model,
-          state: this.state.get('view-map')
-        })
-      }, {
-        id: 'timeline',
-        label: 'Timeline',
-        view: new my.Timeline({
-          model: this.model,
-          state: this.state.get('view-timeline')
         })
       }];
     }
