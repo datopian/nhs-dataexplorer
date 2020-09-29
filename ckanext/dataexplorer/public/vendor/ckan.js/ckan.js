@@ -44,16 +44,23 @@ if (isNodeModule) {
     var actualQuery = my._normalizeQuery(queryObj);
     this.action('datastore_search', actualQuery, function(err, results) {
       // map ckan types to our usual types ...
-      var fields = _.map(results.result.fields, function(field) {
-        field.type = field.type in my.ckan2JsonTableSchemaTypes ? my.ckan2JsonTableSchemaTypes[field.type] : field.type;
-        return field;
-      });
-      var out = {
-        total: results.result.total,
-        fields: fields,
-        hits: results.result.records
-      };
-      cb(null, out);
+      var out = {}
+      if (results){
+          var fields = _.map(results.result.fields, function(field) {
+            field.type = field.type in my.ckan2JsonTableSchemaTypes ? my.ckan2JsonTableSchemaTypes[field.type] : field.type;
+            return field;
+          });
+          out = {
+            total: results.result.total,
+            fields: fields,
+            hits: results.result.records
+          };
+          cb(null, out);
+      }
+      else{
+        err = 'There are no views created for this resource yet.';
+        cb(err, out);
+      }
     });
   };
 
