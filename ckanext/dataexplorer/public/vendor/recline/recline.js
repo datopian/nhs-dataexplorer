@@ -4455,6 +4455,7 @@ my.Extractor = Backbone.View.extend({
             <option value="tsv">TSV</option> \
             <option value="xml">XML</option> \
             <option value="json">JSON</option> \
+            <option value="zip">ZIP</option> \
           </select> \
           <input class="form-control extract-data-input" type="hidden" id="extract_data" name="extract_data" value=""> \
         </fieldset> \
