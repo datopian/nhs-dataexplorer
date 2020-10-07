@@ -10,6 +10,7 @@ import json
 import csv
 import cStringIO
 import codecs
+import zipfile
 
 import ckan.logic as l
 
@@ -20,7 +21,7 @@ from ckan.common import _
 from ckanext.dataexplorer.helpers import CustomJSONEncoder
 
 
-DUMP_FORMATS = 'csv', 'json', 'xml', 'tsv'
+DUMP_FORMATS = 'csv', 'json', 'xml', 'tsv', 'zip'
 
 UTF8_BOM = u'\uFEFF'.encode(u'utf-8')
 
@@ -105,6 +106,26 @@ class UnicodeCSVWriter:
         for row in rows:
             self.writerow(row)
     
+    def _as_str(self, s):
+        if isinstance(s, str) or isinstance(s, unicode):
+            return s
+        return str(s)
+
+class ZipWriter():
+
+    def __init__(self, delimiter=',', encoding="utf-8", **kwds):
+        # Redirect output to a buffer
+        self.csv_buffer = cStringIO.StringIO()
+        self.writer = csv.writer(self.csv_buffer, delimiter=delimiter, **kwds)
+        self.encoder = codecs.getincrementalencoder(encoding)()
+
+    def writerow(self, row):
+        self.writer.writerow([self._as_str(s).encode("utf-8") for s in row])
+    
+    def writerows(self, rows):
+        for row in rows:
+            self.writerow(row)
+
     def _as_str(self, s):
         if isinstance(s, str) or isinstance(s, unicode):
             return s
@@ -224,6 +245,39 @@ class FileWriterService():
         workbook.close()
         response.write(output.getvalue())
 
+    def _zip_writer(self, columns, records, response, name):
+
+        if hasattr(response, u'headers'):
+            response.headers['Content-Type'] = b'application/zip; charset=utf-8'
+            if name:
+                response.headers['Content-disposition'] = (
+                    b'attachment; filename="{name}.zip"'.format(
+                        name=name.encode('utf-8'))) 
+
+        zip_writer = ZipWriter()
+        # Writing headers
+        zip_writer.writerow([c.encode("utf-8") for c in columns])
+
+        # Writing records
+        for record in records:
+            zip_writer.writerow([record[column] for column in columns])
+
+        zip_buffer = cStringIO.StringIO()
+        with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED, allowZip64=True) as zip_file:
+            # Fetch UTF-8 output from the queue ...
+            data = zip_writer.csv_buffer.getvalue()
+            data = data.decode("utf-8")
+            # ... and reencode it into the target encoding
+            data = zip_writer.encoder.encode(data)
+
+            zip_file.writestr(name + '.csv', data)
+
+        response.write(zip_buffer.getvalue())
+
+        #clear buffers
+        zip_buffer.truncate(0)
+        zip_writer.csv_buffer.truncate(0)
+
     def write_to_file(self, columns, records, format, response, name):
 
         format = format.lower()
@@ -235,5 +289,7 @@ class FileWriterService():
             return self._xml_writer(columns, records, response, name)
         if format == 'tsv':
             return self._tsv_writer(columns, records, response, name)
+        if format == 'zip':
+            return self._zip_writer(columns, records, response, name)
         raise l.ValidationError(_(
             u'format: must be one of %s') % u', '.join(DUMP_FORMATS))
