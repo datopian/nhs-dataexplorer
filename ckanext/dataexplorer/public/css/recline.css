@@ -346,9 +346,6 @@ body {
   font-weight: bold;
 }
 
-.recline-fields-view .facet-item .count {
-}
-
 /**********************************************************
   * Notifications
   *********************************************************/
@@ -376,4 +373,26 @@ body {
   -moz-border-radius: 0px;
   border-radius: 0px;
   border-top: none;
+}
+
+/**********************************************************
+  * Modal
+*********************************************************/
+
+.modal{
+  margin-top: 10rem;
+  position: absolute;
+  display: none;
+  justify-content: center;
+}
+
+.modal-content{
+  padding: 2rem;
+  background-color: #F5F5F5;
+  align-items: center;
+  text-align: center;
+}
+
+.modal-btn{
+  min-width: 10rem;
 }

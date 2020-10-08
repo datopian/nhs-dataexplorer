@@ -15,6 +15,16 @@
         <div class="left">{{ _('Loading...') }}</div>
       </h4>
     </div>
+    <div class="modal">
+      <div class="row">
+        <div class="modal-content">
+          <h3>Results exceed the limit of rows.</h3>
+          <p>Use API to download the full result set or continue with the truncated.</p>
+          <button class="btn extract-button modal-btn" id="confirm-btn">Ok</button>
+          <button class="btn extract-button modal-btn" id="cancel-btn">Cancel</button>
+        </div>
+      </div>
+    </div>
   </main>
 
   {% resource 'dataexplorer/main' %}

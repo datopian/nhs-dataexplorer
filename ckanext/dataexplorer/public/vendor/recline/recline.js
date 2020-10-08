@@ -4481,6 +4481,7 @@ my.Extractor = Backbone.View.extend({
   onExtract: function(e) {
     var self = this;
     e.preventDefault();
+
     var format = this.$el.find('.select-format').val();
     var query = CKAN._normalizeQuery(self.model.queryState.attributes);
     query.ckan_resource_id = self.model.attributes.id;
@@ -4490,6 +4491,28 @@ my.Extractor = Backbone.View.extend({
     query.offset = 0;
     var input = this.$el.find('.extract-data-input').val(JSON.stringify(query));
 
+    if (this.model.recordCount > query.limit){
+      this.showModal(self)
+    } else{
+      this.extractFile(self)
+    }
+  },
+  showModal: function(self) {
+    var modal = document.getElementsByClassName("modal")[0]
+    modal.style.display = "flex"
+    
+    var confirmBtn = modal.querySelector("#confirm-btn");
+    confirmBtn.onclick = function() {
+      self.extractFile(self)
+      modal.style.display = "none" 
+    }
+
+    var cancelBtn = modal.querySelector("#cancel-btn");
+    cancelBtn.onclick = function() { 
+      modal.style.display = "none" 
+    }
+  },
+  extractFile: function(self){
     var endpoint = self.model.attributes.endpoint
     var action = ''
     if (!endpoint) {
@@ -4501,8 +4524,7 @@ my.Extractor = Backbone.View.extend({
       parts.splice(-1, 1)
       action = parts.join('/') + '/dataexplorer/extract'
     }
-
-    var form = this.$el.find('.select-format-form').attr('action', action);
+    var form = self.$el.find('.select-format-form').attr('action', action);
     form.submit();
   }
 });
