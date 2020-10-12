@@ -42,7 +42,7 @@ class DataExplorer(base.BaseController):
         if request.method == 'POST':
             data_dict = dict(request.POST)
             data = json.loads(data_dict['extract_data'])
-            data['limit'] = config.get('ckanext.dataexplorer.extract_rows_limit', 100000)
+            data['limit'] = config.get('ckanext.dataexplorer.extract_rows_limit', 600000)
             format = data.pop('format')
             log.info("data: {}".format(data))
             resource_meta = self._get_action('resource_show', {'id': data['ckan_resource_id']})
