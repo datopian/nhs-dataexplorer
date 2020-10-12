@@ -4460,7 +4460,7 @@ my.Extractor = Backbone.View.extend({
           <input class="form-control extract-data-input" type="hidden" id="extract_data" name="extract_data" value=""> \
         </fieldset> \
         <br> \
-        <p><i class="icon-info-sign"></i> ' + ckan.i18n._('Downloads are limited to the most recent 400000 rows') + '</p> \
+        <p><i class="icon-info-sign"></i> ' + ckan.i18n._('Downloads are limited to the most recent 300000 rows') + '</p> \
         <button type="submit" class="btn extract-button">' + ckan.i18n._('Download') + '</button> \
       </form> \
     </div> \
@@ -4486,7 +4486,7 @@ my.Extractor = Backbone.View.extend({
     var query = CKAN._normalizeQuery(self.model.queryState.attributes);
     query.ckan_resource_id = self.model.attributes.id;
     query.resource_id = self.model.attributes.bq_table_name;
-    query.limit = 400000;
+    query.limit = 300000;
     query.format = format;
     query.offset = 0;
     var input = this.$el.find('.extract-data-input').val(JSON.stringify(query));
