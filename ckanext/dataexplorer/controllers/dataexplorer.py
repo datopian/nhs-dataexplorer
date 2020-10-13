@@ -48,6 +48,10 @@ class DataExplorer(base.BaseController):
             resource_meta = self._get_action('resource_show', {'id': data['ckan_resource_id']})
             name =  resource_meta.get('name', "extract").replace(' ', '_')
 
+            filters = data.get('filters', {})
+            if len(filters) > 0:
+                name += "_filtered_data"
+
             try:
                 resource_data = self._get_action('datastore_search', data)
                 for key in resource_data['fields']:
