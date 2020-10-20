@@ -869,7 +869,8 @@ my.Query = Backbone.Model.extend({
       from: 0,
       q: '',
       facets: {},
-      filters: []
+      filters: [],
+      fields: []
     };
   },
   _filterTemplates: {
@@ -3232,6 +3233,8 @@ my.SlickGrid = Backbone.View.extend({
       return $('<div>').text(name).html();
     }
 
+    var fields = []
+    
     _.each(this.model.fields.toJSON(),function(field){
       var column = {
         id: field.id,
@@ -3269,7 +3272,11 @@ my.SlickGrid = Backbone.View.extend({
         }
       }
       columns.push(column);
+      fields.push(column.id);
     });
+
+    this.model.queryState.set({fields:fields})
+
     // Restrict the visible columns
     var visibleColumns = _.filter(columns, function(column) {
       return _.indexOf(self.state.get('hiddenColumns'), column.id) === -1;
@@ -3402,7 +3409,7 @@ my.SlickGrid = Backbone.View.extend({
           model.destroy()
         }
     }) ;
-    var columnpicker = new Slick.Controls.ColumnPicker(columns, this.grid,
+    var columnpicker = new Slick.Controls.ColumnPicker(columns, this.grid, this.model,
                                                        _.extend(options,{state:this.state}));
     if (self.visible){
       self.grid.init();
@@ -3536,7 +3543,7 @@ my.GridControl= Backbone.View.extend({
 *
 */
 (function ($) {
-  function SlickColumnPicker(columns, grid, options) {
+  function SlickColumnPicker(columns, grid, model, options) {
     var $menu;
     var columnCheckboxes;
 
@@ -3558,6 +3565,7 @@ my.GridControl= Backbone.View.extend({
     }
 
     function handleHeaderContextMenu(e, args) {
+      var current_columns = grid.getColumns()
       e.preventDefault();
       $menu.empty();
       columnCheckboxes = [];
@@ -3569,7 +3577,14 @@ my.GridControl= Backbone.View.extend({
         columnCheckboxes.push($input);
 
         if (grid.getColumnIndex(columns[i].id) !== null) {
-          $input.attr('checked', 'checked');
+
+          $input.attr('checked', false);
+
+          for (var j = 0; j < current_columns.length; j++) {
+            if (current_columns[j].id == columns[i].id){
+              $input.attr('checked', 'checked');
+            }
+          }
         }
         $input.appendTo($li);
         $('<label />')
@@ -3639,6 +3654,12 @@ my.GridControl= Backbone.View.extend({
         }
 
         grid.setColumns(visibleColumns);
+
+        var fields = []
+        for (var i = 0; i < visibleColumns.length; i++){
+          fields.push(visibleColumns[i].id)
+        }
+        model.queryState.attributes.fields = fields;
         options.state.set({hiddenColumns:hiddenColumnsIds});
       }
     }
