@@ -173,8 +173,8 @@ if (isNodeModule) {
       });
     }
 
-    if (queryObj.fields){
-      actualQuery.fields = queryObj.fields
+    if (queryObj.fields && queryObj.fields.length > 0) {
+      actualQuery.fields = queryObj.fields;
     }
 
     return actualQuery;
