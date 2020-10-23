@@ -4504,12 +4504,14 @@ my.Extractor = Backbone.View.extend({
     e.preventDefault();
 
     var format = this.$el.find('.select-format').val();
+    var fields = self.model.queryState.attributes.fields;
     var query = CKAN._normalizeQuery(self.model.queryState.attributes);
     query.ckan_resource_id = self.model.attributes.id;
     query.resource_id = self.model.attributes.bq_table_name;
     query.limit = 200000;
     query.format = format;
     query.offset = 0;
+    query.fields = fields;
     var input = this.$el.find('.extract-data-input').val(JSON.stringify(query));
 
     if (this.model.recordCount > query.limit){

@@ -153,7 +153,6 @@ if (isNodeModule) {
       resource_id: queryObj.resource_id,
       q: queryObj.q,
       filters: {},
-      fields: [],
       limit: queryObj.size || 10,
       offset: queryObj.from || 0
     };
@@ -171,10 +170,6 @@ if (isNodeModule) {
           actualQuery.filters[filter.field] = filter.term;
         }
       });
-    }
-
-    if (queryObj.fields && queryObj.fields.length > 0) {
-      actualQuery.fields = queryObj.fields;
     }
 
     return actualQuery;
