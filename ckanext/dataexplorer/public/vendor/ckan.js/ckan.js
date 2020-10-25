@@ -171,6 +171,7 @@ if (isNodeModule) {
         }
       });
     }
+
     return actualQuery;
   };
 

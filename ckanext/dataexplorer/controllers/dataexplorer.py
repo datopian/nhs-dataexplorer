@@ -54,8 +54,8 @@ class DataExplorer(base.BaseController):
 
             try:
                 resource_data = self._get_action('datastore_search', data)
-                for key in resource_data['fields']:
-                    columns.append(key['id'])
+                for key in data['fields']:
+                    columns.append(key)
 
                 try:
                     columns.remove('_id')
