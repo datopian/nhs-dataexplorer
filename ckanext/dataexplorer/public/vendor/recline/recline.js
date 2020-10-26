@@ -3293,6 +3293,7 @@ my.SlickGrid = Backbone.View.extend({
 
     // Move hidden columns to the end, so they appear at the bottom of the
     // column picker
+    /*
     var tempHiddenColumns = [];
     for (var i = columns.length -1; i >= 0; i--){
       if (_.indexOf(_.pluck(visibleColumns,'id'),columns[i].id) === -1){
@@ -3300,6 +3301,7 @@ my.SlickGrid = Backbone.View.extend({
       }
     }
     columns = columns.concat(tempHiddenColumns);
+    */
 
     // Transform a model object into a row
     function toRow(m) {
@@ -3578,13 +3580,13 @@ my.GridControl= Backbone.View.extend({
 
         if (grid.getColumnIndex(columns[i].id) !== null) {
 
-          $input.attr('checked', false);
-
+          var check = false;
           for (var j = 0; j < current_columns.length; j++) {
             if (current_columns[j].id == columns[i].id){
-              $input.attr('checked', 'checked');
+              check = true;
             }
           }
+          $input.attr('checked', check);
         }
         $input.appendTo($li);
         $('<label />')
@@ -3653,12 +3655,13 @@ my.GridControl= Backbone.View.extend({
           return;
         }
 
-        grid.setColumns(visibleColumns);
-
         var fields = []
         for (var i = 0; i < visibleColumns.length; i++){
           fields.push(visibleColumns[i].id)
         }
+
+        grid.setColumns(visibleColumns);
+
         model.queryState.attributes.fields = fields;
         options.state.set({hiddenColumns:hiddenColumnsIds});
       }
