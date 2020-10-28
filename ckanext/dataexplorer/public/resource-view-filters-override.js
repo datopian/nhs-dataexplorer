@@ -17,7 +17,7 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
         // value so _appendDropdowns() will create its dropdown
         var filters = {};
         filters[evt.val] = [];
-  
+
         $(this).select2('destroy');
         _appendDropdowns(filtersDiv, resourceId, dropdownTemplate, fields, filters);
         evt.preventDefault();
@@ -48,10 +48,11 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
         let ok_to_add = true;
         // if .resource-view-filter-values exists it's ok
         for ( var i = 0, l = current_filters.length; i < l; i++ ) {
+
           let elems = $(current_filters[i]).find('.resource-view-filter-values');
           if (elems.length > 0) {
             // OK
-            console.log('OK')
+            //console.log('OK')
           } else {
             ok_to_add = false;
             let elem = $(current_filters[i]);
@@ -90,6 +91,7 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
       function _buildDropdown(el, template, filterName) {
         var theseFilters = filters[filterName] || [];
         template = $(template.replace(/{filter}/g, filterName));
+
         // FIXME: Get the CSS class from some external variable
         var dropdowns = template.find('.resource-view-filter-values');
   
@@ -109,7 +111,7 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
         var queryLimit = 20;
         dropdowns.find('input').select2({
           allowClear: true,
-          placeholder: ' ', // select2 needs a placeholder to allow clearing
+          placeholder: 'Select a value', // select2 needs a placeholder to allow clearing
           width: '300px',
           minimumInputLength: 0,
           ajax: {
@@ -160,12 +162,20 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
             callback(data);
           },
         }).on('change', _onChange);
+
+        var close_bt = $(template).find('.close');
+        close_bt.click(function (){
+          ckan.views.filters.unset(filterName);
+          $(template).parent().find('input[value='+filterName+']').parent().remove();
+          $(template).remove();
+        });
   
         return template;
       }
     }
   
     function _onChange(evt) {
+
       var filterName = evt.currentTarget.name,
           filterValue = evt.val,
           currentFilters = ckan.views.filters.get(filterName) || [],
@@ -173,7 +183,7 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
   
       // Make sure we're not editing the original array, but a copy.
       currentFilters = currentFilters.slice();
-  
+
       if (evt.removed) {
         addToIndex = currentFilters.indexOf(evt.removed.id);
         if (addToIndex !== -1) {
@@ -189,6 +199,7 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
       } else {
         ckan.views.filters.unset(filterName);
       }
+
     }
   
     return {
@@ -197,6 +208,11 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
         dropdownTemplate: [
           '<div class="resource-view-filter">',
           '  {filter}:',
+          '  <div class="text-left">',
+          '    <button type="button" class="close" aria-label="Close Filter">',
+          '      <span aria-hidden="true">&times;</span>',
+          '    </button>',
+          '  </div>',
           '  <div class="resource-view-filter-values"></div>',
           '</div>',
         ].join('\n')
