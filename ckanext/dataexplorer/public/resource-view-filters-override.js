@@ -6,8 +6,8 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
           resourceId = self.options.resourceId,
           fields = self.options.fields,
           dropdownTemplate = self.options.dropdownTemplate,
-          addFilterTemplate = '<a class="btn btn-primary" href="#">' + self._('Add Filter') + '</a>',
-          filtersDiv = $('<div></div>');
+          addFilterTemplate = '<a class="btn btn-primary btn-add-filter" href="#">' + self._('Add Filter') + '</a>',
+          filtersDiv = $('<div class="resource-view-filters-container"></div>');
   
       var filters = ckan.views.filters.get();
       _appendDropdowns(filtersDiv, resourceId, dropdownTemplate, fields, filters);
@@ -19,11 +19,12 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
         filters[evt.val] = [];
 
         $(this).select2('destroy');
+        $(this).parent().remove();
         _appendDropdowns(filtersDiv, resourceId, dropdownTemplate, fields, filters);
         evt.preventDefault();
       });
-      self.el.append(filtersDiv);
       self.el.append(addFilterButton);
+      self.el.append(filtersDiv);
     }
   
     function _buildAddFilterButton(self, el, template, fields, filters, onChangeCallback) {
@@ -44,25 +45,40 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
         // FIXME: Move this class name to some external variable to keep it DRY
   
         // check if we already have filters without fields
-        let current_filters = $('.resource-view-filter');
+        let current_fields = $('.resource-view-filter-field');
         let ok_to_add = true;
-        // if .resource-view-filter-values exists it's ok
+
+        if (current_fields.length > 0){
+          ok_to_add = false;
+          for ( var i = 0, l = current_fields.length; i < l; i++ ) {
+            let elem = $(current_fields[i]);
+            elem.hide(400).show(200);
+          }
+        }
+
+        // if .resource-view-filter-values exists, check if it has at least one value
+        let current_filters = $('.resource-view-filter');
         for ( var i = 0, l = current_filters.length; i < l; i++ ) {
 
+          let hasValue = false;
           let elems = $(current_filters[i]).find('.resource-view-filter-values');
-          if (elems.length > 0) {
-            // OK
-            //console.log('OK')
-          } else {
+          $.each(elems, function (i, elem) {
+            let input = $(elem).children('input');
+            if ($(input).attr('value')){
+              hasValue = true;
+            }
+          });
+          
+          if (hasValue == false) {
             ok_to_add = false;
             let elem = $(current_filters[i]);
             elem.hide(400).show(200);
           }
           
         }
-  
+      
         if (ok_to_add) {
-          var addFilterDiv = $('<div class="resource-view-filter"><input type="hidden"></input></div>'),
+          var addFilterDiv = $('<div class="resource-view-filter-field"><input type="hidden"></input></div>'),
               addFilterInput = addFilterDiv.find('input');
           el.append(addFilterDiv);
   
@@ -70,7 +86,6 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
           addFilterInput.select2({
             data: data,
             placeholder: self._('Select a field'),
-            width: '350px',
           }).on('change', onChangeCallback);
         }
         evt.preventDefault();
@@ -80,12 +95,13 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
     }
   
     function _appendDropdowns(dropdowns, resourceId, template, fields, filters) {
+      
       $.each(fields, function (i, field) {
         if (filters.hasOwnProperty(field)) {
           dropdowns.append(_buildDropdown(self.el, template, field));
         }
       });
-  
+
       return dropdowns;
   
       function _buildDropdown(el, template, filterName) {
@@ -100,11 +116,9 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
         theseFilters = theseFilters.concat([undefined]);
         theseFilters.forEach(function (value, i) {
           var dropdown = $('<input type="hidden" name="'+filterName+'"></input>');
-  
           if (value !== undefined) {
             dropdown.val(value);
           }
-  
           dropdowns.append(dropdown);
         });
   
@@ -207,8 +221,8 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
       options: {
         dropdownTemplate: [
           '<div class="resource-view-filter">',
-          '  {filter}:',
-          '  <div class="text-left">',
+          '  <div class="resource-view-filter-header">',
+          '    {filter}',
           '    <button type="button" class="close" aria-label="Close Filter">',
           '      <span aria-hidden="true">&times;</span>',
           '    </button>',
