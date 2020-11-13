@@ -1,5 +1,5 @@
 body {
-  background-color: #fff;
+  background-color: #F0F4F5;
 }
 
 .recline-data-explorer {
@@ -192,7 +192,7 @@ body {
 }
 
 .recline-pager .pagination .page-range a:hover {
-  background-color: #ffffff;
+  background-color: #F0F4F5;
 }
 
 .recline-pager .pagination > li:first-child > a {
