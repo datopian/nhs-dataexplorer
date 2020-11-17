@@ -1,10 +1,11 @@
 body {
-  background-color: #fff;
+  background-color: #F0F4F5;
 }
 
 .recline-data-explorer {
   position: relative;
   overflow: auto;
+  background-color: #F0F4F5;
 }
 
 .recline-record-count {
@@ -200,10 +201,11 @@ body {
 .recline-pager .pagination .page-range a {
   padding: 0px 12px;
   border: none;
+  background-color: #F0F4F5;
 }
 
 .recline-pager .pagination .page-range a:hover {
-  background-color: #ffffff;
+  background-color: #F0F4F5;
 }
 
 .recline-pager .pagination > li:first-child > a {
@@ -220,6 +222,10 @@ body {
   border-bottom-left-radius: 0px;
   border-top-left-radius: 0px;
   height: 34px;
+}
+
+.recline-pager .pagination .btn-default {
+  background-color: #F0F4F5;
 }
 
 /**********************************************************
