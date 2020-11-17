@@ -21,6 +21,19 @@ body {
 .recline-slickgrid {
   height: 600px;
 }
+
+@media screen and (min-width:2100px) and (min-height:850px){
+  .recline-slickgrid {
+    height: 800px;
+  }
+}
+
+@media screen and (min-width:2100px) and (min-height:1250px){
+  .recline-slickgrid {
+    height: 1200px;
+  }
+}
+
 /*
 .recline-timeline .vmm-timeline {
   height: 600px;

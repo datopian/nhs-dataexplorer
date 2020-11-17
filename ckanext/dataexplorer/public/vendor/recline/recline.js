@@ -3245,6 +3245,14 @@ my.SlickGrid = Backbone.View.extend({
         formatter: formatter,
         validator:validator(field)
       };
+
+      // setting column.width dinamically
+      var numFields = self.model.fields.length;
+      // compute column widths
+      var fullWidth = self.$el.width();
+      var width = parseInt(Math.max(column.minWidth, fullWidth / numFields), 10);
+      column.width = width;
+
       var widthInfo = _.find(self.state.get('columnsWidth'),function(c){return c.column === field.id;});
       if (widthInfo){
         column.width = widthInfo.width;
