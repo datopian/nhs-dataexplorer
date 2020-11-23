@@ -3070,7 +3070,7 @@ this.recline.View = this.recline.View || {};
     // * message: message to show.
     // * category: warning (default), success, error
     // * persist: if true alert is persistent, o/w hidden after 3s (default = false)
-    // * loader: if true show loading spinner
+    // * loader: if true show loading progress
     notify: function (flash) {
       var tmplData = _.extend(
         {
@@ -4792,6 +4792,13 @@ this.recline.View = this.recline.View || {};
       var self = this;
       e.preventDefault();
 
+      //preloads Papaparse and caches it
+      var src = "https://unpkg.com/papaparse@5.3.0/papaparse.min.js";
+      $.getScript(src);
+      $.ajaxSetup({
+        cache: true,
+      });
+
       // var format = this.$el.find(".select-format").val();
       var fields = self.model.queryState.attributes.fields;
       var query = CKAN._normalizeQuery(self.model.queryState.attributes);
@@ -4812,10 +4819,10 @@ this.recline.View = this.recline.View || {};
     },
     extractFile: function (self, sql_query) {
       var base_path = self.model.attributes.endpoint || self.options.site_url;
-      // var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${sql_query}`; USE BASE_PATH IN PRODUCTION
-      var endpoint = `https://ckan.nhs.staging.datopian.com/api/3/action/datastore_search_sql?sql=${sql_query}`;
+      var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${sql_query}`; // USE BASE_PATH IN PRODUCTION
+      // var endpoint = `https://ckan.nhs.staging.datopian.com/api/3/action/datastore_search_sql?sql=${sql_query}`;
+      self.progress();
 
-      self.spinner();
       fetch(endpoint)
         .then(async (resp) => {
           let resource = await resp.json();
@@ -4824,22 +4831,55 @@ this.recline.View = this.recline.View || {};
               resource.result["gc_urls"].forEach((obj) => {
                 window.open(obj["url"]);
               });
-              self.spinner(true);
+              self.progress(true);
             } else {
               //small file, convert json result to CSV
-              console.log(resource.result.result.records);
-              self.spinner(true);
+              this.exportCSVFile(
+                resource.result.result.records,
+                self.model.attributes.title,
+                self
+              );
             }
           } else {
-            self.spinner(true);
+            self.progress(true);
             this.showErrorModal();
           }
         })
         .catch((err) => {
           console.warn(err);
-          self.spinner(true);
+          self.progress(true);
           this.showErrorModal();
         });
+    },
+    exportCSVFile: function (resp_json, filename, self) {
+      var exported_filename = filename + ".csv";
+      try {
+        let csv = Papa.unparse(resp_json);
+        var blob = new Blob([csv], {
+          type: "text/csv;charset=utf-8;",
+        });
+        if (navigator.msSaveBlob) {
+          // IE 10+
+          navigator.msSaveBlob(blob, exported_filename);
+        } else {
+          var link = document.createElement("a");
+          if (link.download !== undefined) {
+            // Browsers that support HTML5 download attribute
+            var url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", exported_filename);
+            link.style.visibility = "hidden";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
+        }
+        self.progress(true);
+      } catch (error) {
+        console.warn(error);
+        self.progress(true);
+        self.showErrorModal();
+      }
     },
     showErrorModal: function () {
       var modal = document.getElementsByClassName("modal")[0];
@@ -4854,12 +4894,16 @@ this.recline.View = this.recline.View || {};
       </div>
     </div>
       `;
+      var cancelBtn = modal.querySelector("#cancel-btn");
+      cancelBtn.onclick = function () {
+        modal.style.display = "none";
+      };
     },
-    spinner: function (hide = false) {
+    progress: function (hide = false) {
       var modal = document.getElementsByClassName("modal")[0];
       if (hide) {
         modal.style.display = "none";
-        return
+        return;
       }
       modal.style.display = "flex";
       document.getElementsByClassName("modal")[0].innerHTML = `
@@ -4867,11 +4911,15 @@ this.recline.View = this.recline.View || {};
       <div class="row">
         <div class="modal-content">
           <h3>Extracting...</h3>
+          <button class="btn extract-button modal-btn" id="cancel-btn">Hide</button>
         </div>
-        <button class="btn extract-button modal-btn" id="cancel-btn">Hide</button>
       </div>
     </div>
       `;
+      var cancelBtn = modal.querySelector("#cancel-btn");
+      cancelBtn.onclick = function () {
+        modal.style.display = "none";
+      };
     },
     jsQueryToSQL: function (query_obj) {
       let query = "";
