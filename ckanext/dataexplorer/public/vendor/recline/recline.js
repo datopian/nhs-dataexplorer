@@ -4948,7 +4948,6 @@ this.recline.View = this.recline.View || {};
       query += ` FROM \`${query_obj["resource_id"]}\` `;
 
       if ("filters" || "q" in query_obj) {
-        // console.log("query_obj", query_obj["fields"]);
         let where_str = this.where_clauses(query_obj["fields"], query_obj);
         query += ` ${where_str} `;
       }
@@ -4972,10 +4971,9 @@ this.recline.View = this.recline.View || {};
         let where_filters = "";
 
         for (const [key, value] of Object.entries(filters)) {
-          console.log(Object.entries(filters));
           let single_where_statament = "";
           value.forEach((value_item) => {
-            if (this.get_field_type(fields, key) == "num") {
+            if (this.get_field_type(value_item) == "num") {
               single_where_statament += `${key} = ${value_item} OR `;
             } else {
               single_where_statament += `${key} = "${value_item}" OR `;
@@ -4990,8 +4988,7 @@ this.recline.View = this.recline.View || {};
       if (q != "") {
         let where_q = " WHERE ";
         for (const [key, value] of Object.entries(filters)) {
-          console.log(Object.entries(filters));
-          if (this.get_field_type(fields, key) == "string") {
+          if (this.get_field_type(value) == "string") {
             where_q_str += ` LOWER(${key}) like LOWER("${value.slice(
               0,
               -2
@@ -5008,20 +5005,14 @@ this.recline.View = this.recline.View || {};
       }
       return where_str;
     },
-    get_field_type: function (fields, key) {
-      let string_types = ["STRING"];
-      let field_type = [];
-      fields.forEach((lfield) => {
-        if (lfield["id"] === key) {
-          field_type = lfield["type"];
-        }
-      });
+    get_field_type: function (value) {
 
-      if (field_type[0] in string_types) {
+      if (isNaN(Number(value))) {
         return "string";
       } else {
         return "num";
       }
+    
     },
   });
 })(jQuery, recline.View);
