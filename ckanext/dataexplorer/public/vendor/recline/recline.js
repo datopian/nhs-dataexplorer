@@ -4815,8 +4815,8 @@ this.recline.View = this.recline.View || {};
     extractFile: function (self, sql_query) {
       var base_path = self.model.attributes.endpoint || self.options.site_url;
       console.log(base_path);
-      var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${sql_query}`; // USE BASE_PATH IN PRODUCTION
-      // var endpoint = `https://ckan.nhs.staging.datopian.com/api/3/action/datastore_search_sql?sql=${sql_query}`;
+      // var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${sql_query}`; // USE BASE_PATH IN PRODUCTION
+      var endpoint = `https://ckan.nhs.staging.datopian.com/api/3/action/datastore_search_sql?sql=${sql_query}`;
       self.progress();
 
       fetch(endpoint)
@@ -4948,6 +4948,7 @@ this.recline.View = this.recline.View || {};
       query += ` FROM \`${query_obj["resource_id"]}\` `;
 
       if ("filters" || "q" in query_obj) {
+        // console.log("query_obj", query_obj["fields"]);
         let where_str = this.where_clauses(query_obj["fields"], query_obj);
         query += ` ${where_str} `;
       }
@@ -4971,9 +4972,10 @@ this.recline.View = this.recline.View || {};
         let where_filters = "";
 
         for (const [key, value] of Object.entries(filters)) {
+          console.log(Object.entries(filters));
           let single_where_statament = "";
           value.forEach((value_item) => {
-            if (this.get_field_type(value_item) == "num") {
+            if (this.get_field_type(fields, key) == "num") {
               single_where_statament += `${key} = ${value_item} OR `;
             } else {
               single_where_statament += `${key} = "${value_item}" OR `;
@@ -4986,9 +4988,10 @@ this.recline.View = this.recline.View || {};
       }
 
       if (q != "") {
-        let where_q = "";
+        let where_q = " WHERE ";
         for (const [key, value] of Object.entries(filters)) {
-          if (this.get_field_type(value) == "string") {
+          console.log(Object.entries(filters));
+          if (this.get_field_type(fields, key) == "string") {
             where_q_str += ` LOWER(${key}) like LOWER("${value.slice(
               0,
               -2
@@ -5005,16 +5008,20 @@ this.recline.View = this.recline.View || {};
       }
       return where_str;
     },
-    get_field_type: function (value) {
-      
-      if (typeof value == "string"){
+    get_field_type: function (fields, key) {
+      let string_types = ["STRING"];
+      let field_type = [];
+      fields.forEach((lfield) => {
+        if (lfield["id"] === key) {
+          field_type = lfield["type"];
+        }
+      });
+
+      if (field_type[0] in string_types) {
         return "string";
+      } else {
+        return "num";
       }
-
-      if (typeof value == "number"){
-        return "num"
-      }
-
     },
   });
 })(jQuery, recline.View);
