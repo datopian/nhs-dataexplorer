@@ -3577,12 +3577,14 @@ this.recline.View = this.recline.View || {};
         self.model.query({ sort: sort });
       });
 
-      this._slickHandler.subscribe(this.grid.onColumnsReordered, function (
-        e,
-        args
-      ) {
-        self.state.set({ columnsOrder: _.pluck(self.grid.getColumns(), "id") });
-      });
+      this._slickHandler.subscribe(
+        this.grid.onColumnsReordered,
+        function (e, args) {
+          self.state.set({
+            columnsOrder: _.pluck(self.grid.getColumns(), "id"),
+          });
+        }
+      );
 
       this.grid.onColumnsResized.subscribe(function (e, args) {
         var columns = args.grid.getColumns();
@@ -4792,13 +4794,6 @@ this.recline.View = this.recline.View || {};
       var self = this;
       e.preventDefault();
 
-      //preloads Papaparse and caches it
-      var src = "https://unpkg.com/papaparse@5.3.0/papaparse.min.js";
-      $.getScript(src);
-      $.ajaxSetup({
-        cache: true,
-      });
-
       // var format = this.$el.find(".select-format").val();
       var fields = self.model.queryState.attributes.fields;
       var query = CKAN._normalizeQuery(self.model.queryState.attributes);
@@ -4819,6 +4814,7 @@ this.recline.View = this.recline.View || {};
     },
     extractFile: function (self, sql_query) {
       var base_path = self.model.attributes.endpoint || self.options.site_url;
+      console.log(base_path);
       var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${sql_query}`; // USE BASE_PATH IN PRODUCTION
       // var endpoint = `https://ckan.nhs.staging.datopian.com/api/3/action/datastore_search_sql?sql=${sql_query}`;
       self.progress();
@@ -4853,33 +4849,40 @@ this.recline.View = this.recline.View || {};
     },
     exportCSVFile: function (resp_json, filename, self) {
       var exported_filename = filename + ".csv";
-      try {
-        let csv = Papa.unparse(resp_json);
-        var blob = new Blob([csv], {
-          type: "text/csv;charset=utf-8;",
-        });
-        if (navigator.msSaveBlob) {
-          // IE 10+
-          navigator.msSaveBlob(blob, exported_filename);
-        } else {
-          var link = document.createElement("a");
-          if (link.download !== undefined) {
-            // Browsers that support HTML5 download attribute
-            var url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", exported_filename);
-            link.style.visibility = "hidden";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+      var src = "https://unpkg.com/papaparse@5.3.0/papaparse.min.js";
+      $.getScript(src, function () {
+        try {
+          let csv = Papa.unparse(resp_json);
+          var blob = new Blob([csv], {
+            type: "text/csv;charset=utf-8;",
+          });
+          if (navigator.msSaveBlob) {
+            // IE 10+
+            navigator.msSaveBlob(blob, exported_filename);
+          } else {
+            var link = document.createElement("a");
+            if (link.download !== undefined) {
+              // Browsers that support HTML5 download attribute
+              var url = URL.createObjectURL(blob);
+              link.setAttribute("href", url);
+              link.setAttribute("download", exported_filename);
+              link.style.visibility = "hidden";
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }
           }
+          self.progress(true);
+        } catch (error) {
+          console.warn(error);
+          self.progress(true);
+          self.showErrorModal();
         }
-        self.progress(true);
-      } catch (error) {
-        console.warn(error);
-        self.progress(true);
-        self.showErrorModal();
-      }
+      });
+      //caches Papaparse
+      $.ajaxSetup({
+        cache: true,
+      });
     },
     showErrorModal: function () {
       var modal = document.getElementsByClassName("modal")[0];
