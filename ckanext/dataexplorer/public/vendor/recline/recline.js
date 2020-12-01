@@ -4790,8 +4790,17 @@ this.recline.View = this.recline.View || {};
         document.getElementById("download-format").innerHTML =
           DATASTORE_SEARCH_ROWS_MAX <= self.model.recordCount
             ? '<option value="compressed-csv">Compressed CSV</option>'
-            : '<option value="csv">CSV</option><option value="json">JSON</option>';
+            : '<option value="csv">CSV</option><option value="compressed-csv">Compressed CSV</option><option value="json">JSON</option>';
       }, 2000);
+
+      //Pre-Load helper libraries JSZip for zipping files
+      $.getScript(
+        "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"
+      );
+
+      $.ajaxSetup({
+        cache: true,
+      });
     },
     render: function () {
       var self = this;
@@ -4860,47 +4869,68 @@ this.recline.View = this.recline.View || {};
           let blob = null;
           let exported_filename = "";
 
-          if (format == "csv") {
+          if (format === "csv") {
             exported_filename = filename + ".csv";
             let csv = Papa.unparse(resp_json);
             blob = new Blob([csv], {
               type: "text/csv;charset=utf-8;",
             });
-          } else {
+            self.downloadBlob(blob, exported_filename)
+            self.progress(true);
+
+          } else if (format === "json") {
             exported_filename = filename + ".json";
             let json = JSON.stringify(resp_json);
             blob = new Blob([json], {
               type: "text/plain;charset=utf-8;",
             });
+            self.downloadBlob(blob, exported_filename)
+            self.progress(true);
+
+          } else {
+            // zip files
+            exported_filename = filename + ".csv";
+            let csv = Papa.unparse(resp_json);
+            let blob_content = new Blob([csv], {
+              type: "text/csv;charset=utf-8;",
+            });
+            let zip = new JSZip();
+            zip.file(exported_filename, blob_content);
+            zip
+              .generateAsync({
+                type:"blob",
+              })
+              .then(function (zipped_blob) {
+                self.downloadBlob(zipped_blob, filename)
+                self.progress(true);
+              });
           }
 
-          if (navigator.msSaveBlob) {
-            // IE 10+
-            navigator.msSaveBlob(blob, exported_filename);
-          } else {
-            var link = document.createElement("a");
-            if (link.download !== undefined) {
-              // Browsers that support HTML5 download attribute
-              var url = URL.createObjectURL(blob);
-              link.setAttribute("href", url);
-              link.setAttribute("download", exported_filename);
-              link.style.visibility = "hidden";
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }
-          }
-          self.progress(true);
         } catch (error) {
           console.warn(error);
           self.progress(true);
           self.showErrorModal();
         }
       });
-      //caches Papaparse
-      $.ajaxSetup({
-        cache: true,
-      });
+     
+    },
+    downloadBlob : function (blob, exported_filename){
+      if (navigator.msSaveBlob) {
+        // IE 10+
+        navigator.msSaveBlob(blob, exported_filename);
+      } else {
+        var link = document.createElement("a");
+        if (link.download !== undefined) {
+          // Browsers that support HTML5 download attribute
+          var url = URL.createObjectURL(blob);
+          link.setAttribute("href", url);
+          link.setAttribute("download", exported_filename);
+          link.style.visibility = "hidden";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      }
     },
     showErrorModal: function () {
       var modal = document.getElementsByClassName("modal")[0];
@@ -5024,13 +5054,11 @@ this.recline.View = this.recline.View || {};
       return where_str;
     },
     get_field_type: function (value) {
-      
       if (isNaN(Number(value))) {
         return "string";
       } else {
         return "num";
       }
-
     },
   });
 })(jQuery, recline.View);
