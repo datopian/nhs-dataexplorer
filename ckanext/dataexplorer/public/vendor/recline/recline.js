@@ -4781,7 +4781,7 @@ this.recline.View = this.recline.View || {};
     },
     initialize: function () {
       var self = this;
-      const DATASTORE_SEARCH_ROWS_MAX = 3200; //TODO: Get param from environment/backend
+      const DATASTORE_SEARCH_ROWS_MAX = 32000; //TODO: Get param from environment/backend
       // console.log(self.options);
       _.bindAll(this, "render");
       this.render();
