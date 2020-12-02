@@ -12,6 +12,9 @@ ignore_empty = p.toolkit.get_validator('ignore_empty')
 natural_number_validator = p.toolkit.get_validator('natural_number_validator')
 Invalid = p.toolkit.Invalid
 
+def get_datastore_search_rows_max():
+    return config.get('ckan.datastore_search_rows_max', 0)
+
 
 def get_mapview_config():
     '''
@@ -97,7 +100,9 @@ class ReclineViewBase(p.SingletonPlugin, DefaultTranslation):
 
     def get_helpers(self):
         return {
-            'get_map_config': get_mapview_config
+            'get_map_config': get_mapview_config,
+            'get_datastore_search_rows_max': get_datastore_search_rows_max,
+
         }
 
 

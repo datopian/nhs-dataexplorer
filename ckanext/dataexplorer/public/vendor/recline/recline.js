@@ -4762,8 +4762,7 @@ this.recline.View = this.recline.View || {};
           <label>' +
       ckan.i18n._("Format") +
       '</label> \
-          <select class="select-format form-control"> \
-            <option value="csv">CSV</option> \
+          <select id="download-format" class="select-format form-control"> \
           </select> \
           <input class="form-control extract-data-input" type="hidden" id="extract_data" name="extract_data" value=""> \
         </fieldset> \
@@ -4781,12 +4780,30 @@ this.recline.View = this.recline.View || {};
       "click .extract-button": "onExtract",
     },
     initialize: function () {
+      var self = this;
+      const DATASTORE_SEARCH_ROWS_MAX = 32000; //TODO: Get param from environment/backend
+      // console.log(self.options);
       _.bindAll(this, "render");
       this.render();
+      //Timeout of 2 seconds ensures that the form has been rendered before the select element is accessed
+      setTimeout(() => {
+        document.getElementById("download-format").innerHTML =
+          DATASTORE_SEARCH_ROWS_MAX <= self.model.recordCount
+            ? '<option value="compressed-csv">Compressed CSV</option>'
+            : '<option value="csv">CSV</option><option value="compressed-csv">Compressed CSV</option><option value="json">JSON</option>';
+      }, 2000);
+
+      //Pre-Load helper libraries JSZip for zipping files
+      $.getScript(
+        "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"
+      );
+
+      $.ajaxSetup({
+        cache: true,
+      });
     },
     render: function () {
       var self = this;
-
       var out = Mustache.render(this.template, {});
       this.$el.html(out);
     },
@@ -4794,25 +4811,23 @@ this.recline.View = this.recline.View || {};
       var self = this;
       e.preventDefault();
 
-      // var format = this.$el.find(".select-format").val();
+      var format = document.getElementById("download-format").value;
       var fields = self.model.queryState.attributes.fields;
       var query = CKAN._normalizeQuery(self.model.queryState.attributes);
       query.ckan_resource_id = self.model.attributes.id;
       query.resource_id = self.model.attributes.bq_table_name;
       query.limit = this.model.recordCount;
-      // query.format = format;
-      query.format = "csv";
-
       query.offset = 0;
       query.fields = fields;
+
       var input = this.$el
         .find(".extract-data-input")
         .val(JSON.stringify(query));
 
       var sql_query = this.jsQueryToSQL(query);
-      this.extractFile(self, sql_query);
+      this.extractFile(self, sql_query, format);
     },
-    extractFile: function (self, sql_query) {
+    extractFile: function (self, sql_query, format) {
       var base_path = self.model.attributes.endpoint || self.options.site_url;
       //console.log(base_path);
       var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${sql_query}`; // USE BASE_PATH IN PRODUCTION
@@ -4829,9 +4844,9 @@ this.recline.View = this.recline.View || {};
               });
               self.progress(true);
             } else {
-              //small file, convert json result to CSV
-              this.exportCSVFile(
+              this.exportFile(
                 resource.result.result.records,
+                format,
                 self.model.attributes.title,
                 self
               );
@@ -4847,42 +4862,75 @@ this.recline.View = this.recline.View || {};
           this.showErrorModal();
         });
     },
-    exportCSVFile: function (resp_json, filename, self) {
-      var exported_filename = filename + ".csv";
+    exportFile: function (resp_json, format, filename, self) {
       var src = "https://unpkg.com/papaparse@5.3.0/papaparse.min.js";
       $.getScript(src, function () {
         try {
-          let csv = Papa.unparse(resp_json);
-          var blob = new Blob([csv], {
-            type: "text/csv;charset=utf-8;",
-          });
-          if (navigator.msSaveBlob) {
-            // IE 10+
-            navigator.msSaveBlob(blob, exported_filename);
+          let blob = null;
+          let exported_filename = "";
+
+          if (format === "csv") {
+            exported_filename = filename + ".csv";
+            let csv = Papa.unparse(resp_json);
+            blob = new Blob([csv], {
+              type: "text/csv;charset=utf-8;",
+            });
+            self.downloadBlob(blob, exported_filename)
+            self.progress(true);
+
+          } else if (format === "json") {
+            exported_filename = filename + ".json";
+            let json = JSON.stringify(resp_json);
+            blob = new Blob([json], {
+              type: "text/plain;charset=utf-8;",
+            });
+            self.downloadBlob(blob, exported_filename)
+            self.progress(true);
+
           } else {
-            var link = document.createElement("a");
-            if (link.download !== undefined) {
-              // Browsers that support HTML5 download attribute
-              var url = URL.createObjectURL(blob);
-              link.setAttribute("href", url);
-              link.setAttribute("download", exported_filename);
-              link.style.visibility = "hidden";
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }
+            // zip files
+            exported_filename = filename + ".csv";
+            let csv = Papa.unparse(resp_json);
+            let blob_content = new Blob([csv], {
+              type: "text/csv;charset=utf-8;",
+            });
+            let zip = new JSZip();
+            zip.file(exported_filename, blob_content);
+            zip
+              .generateAsync({
+                type:"blob",
+              })
+              .then(function (zipped_blob) {
+                self.downloadBlob(zipped_blob, filename)
+                self.progress(true);
+              });
           }
-          self.progress(true);
+
         } catch (error) {
           console.warn(error);
           self.progress(true);
           self.showErrorModal();
         }
       });
-      //caches Papaparse
-      $.ajaxSetup({
-        cache: true,
-      });
+     
+    },
+    downloadBlob : function (blob, exported_filename){
+      if (navigator.msSaveBlob) {
+        // IE 10+
+        navigator.msSaveBlob(blob, exported_filename);
+      } else {
+        var link = document.createElement("a");
+        if (link.download !== undefined) {
+          // Browsers that support HTML5 download attribute
+          var url = URL.createObjectURL(blob);
+          link.setAttribute("href", url);
+          link.setAttribute("download", exported_filename);
+          link.style.visibility = "hidden";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      }
     },
     showErrorModal: function () {
       var modal = document.getElementsByClassName("modal")[0];
@@ -5006,13 +5054,11 @@ this.recline.View = this.recline.View || {};
       return where_str;
     },
     get_field_type: function (value) {
-
       if (isNaN(Number(value))) {
         return "string";
       } else {
         return "num";
       }
-    
     },
   });
 })(jQuery, recline.View);
