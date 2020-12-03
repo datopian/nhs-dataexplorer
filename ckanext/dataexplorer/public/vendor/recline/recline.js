@@ -2762,7 +2762,7 @@ this.recline.View = this.recline.View || {};
       </div> \
       <div class="menu-right"> \
         <div class="btn-group" data-toggle="buttons-checkbox"> \
-           <button href="#" data-action="extractor" class="btn btn-default">Extract</button> \
+           <button href="#" data-action="extractor" class="btn btn-default">Data Explorer options</button> \
         </div> \
       </div> \
       <div class="query-editor-here" style="display:inline;"></div> \
@@ -4753,11 +4753,11 @@ this.recline.View = this.recline.View || {};
     className: "recline-data-extractor well",
     template:
       " \
-    <div> \
-      <h3>" +
-      ckan.i18n._("Extract & download") +
-      '</h3> \
-      <form action="" method="POST" class="form-stacked select-format-form"> \
+    <div>" +
+      // <h3>" +
+      // ckan.i18n._("Extract & download") +
+      // '</h3> \
+      '<form action="" method="POST" class="form-stacked select-format-form"> \
         <fieldset> \
           <label>' +
       ckan.i18n._("Format") +
@@ -4771,7 +4771,7 @@ this.recline.View = this.recline.View || {};
       // ckan.i18n._("Downloads are limited to 200000 rows") +
       '</p> \
         <button type="submit" class="btn extract-button">' +
-      ckan.i18n._("Download") +
+      ckan.i18n._("Download filtered records") +
       "</button> \
       </form> \
     </div> \
