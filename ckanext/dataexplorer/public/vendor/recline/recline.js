@@ -5054,11 +5054,13 @@ this.recline.View = this.recline.View || {};
       return where_str;
     },
     get_field_type: function (value) {
-      if (isNaN(Number(value))) {
-        return "string";
-      } else {
+      
+      if (typeof value === "number"){
         return "num";
+      } else{
+        return "string";
       }
+
     },
   });
 })(jQuery, recline.View);
