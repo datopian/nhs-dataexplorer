@@ -5055,18 +5055,14 @@ this.recline.View = this.recline.View || {};
       return where_str;
     },
     get_field_type: function (key, value, model_fields) {
-      var num_types = ["number", "NUMBER", 
-                      "integer", "INTEGER",
-                      "bigint", "BIGINT"];
-
+      var string_types = ["string", "STRING"]
       var type = model_fields.get(key).attributes.type
 
-      if (num_types.includes(type)){
-        return "num";
-      } else{
+      if (string_types.includes(type)){
         return "string";
+      } else{
+        return "num";
       }
-
     },
   });
 })(jQuery, recline.View);
