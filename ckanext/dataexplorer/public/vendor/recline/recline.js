@@ -441,7 +441,7 @@ this.recline.Model = this.recline.Model || {};
       this.recordCount = null;
       this.queryState = new my.Query();
       this.queryState.bind("change facet:add", function () {
-        self.query(); // We want to call query() without any arguments.
+        // self.query(); // We want to call query() without any arguments.
       });
       // store is what we query and save against
       // store will either be the backend or be a memory store if Backend fetch
