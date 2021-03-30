@@ -154,7 +154,8 @@ if (isNodeModule) {
       q: queryObj.q,
       filters: {},
       limit: queryObj.size || 10,
-      offset: queryObj.from || 0
+      offset: queryObj.from || 0,
+      api_call_type: 'browser-data-explorer'
     };
 
     if (queryObj.sort && queryObj.sort.length > 0) {
@@ -250,6 +251,7 @@ recline.Backend.Ckan = recline.Backend.Ckan || {};
       wrapper = new CKAN.Client(out.endpoint);
     }
     queryObj.resource_id = dataset.bq_table_name //dataset.id;
+    queryObj.resource_details = dataset
     wrapper.datastoreQuery(queryObj, function(err, out) {
       if (err) {
         dfd.reject(err);
