@@ -4826,12 +4826,12 @@ this.recline.View = this.recline.View || {};
 
       var model_fields = self.model.fields;
       var sql_query = this.jsQueryToSQL(query, model_fields);
-      this.extractFile(self, sql_query, format);
+      this.extractFile(self, sql_query, format, query);
     },
-    extractFile: function (self, sql_query, format) {
+    extractFile: function (self, sql_query, format, query={}) {
       var base_path = self.model.attributes.endpoint || self.options.site_url;
       //console.log(base_path);
-      var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${sql_query}`; // USE BASE_PATH IN PRODUCTION
+      var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${sql_query}&resource_id=${query.resource_id}`; // USE BASE_PATH IN PRODUCTION
       //var endpoint = `https://ckan.nhs.staging.datopian.com/api/3/action/datastore_search_sql?sql=${sql_query}`;
       self.progress();
 
