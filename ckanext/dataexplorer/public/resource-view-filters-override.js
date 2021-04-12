@@ -95,7 +95,6 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
     }
   
     function _appendDropdowns(dropdowns, resourceId, template, fields, filters) {
-      
       $.each(fields, function (i, field) {
         if (filters.hasOwnProperty(field)) {
           dropdowns.append(_buildDropdown(self.el, template, field));
@@ -144,7 +143,8 @@ this.ckan.module('resource-view-filters-override', function (jQuery) {
                 fields: filterName,
                 distinct: true,
                 sort: filterName,
-                include_total: false
+                include_total: false,
+                api_call_type: 'browser-data-explorer-filter',
               };
   
               if (term !== '') {

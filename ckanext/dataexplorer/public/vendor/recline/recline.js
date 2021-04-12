@@ -441,7 +441,7 @@ this.recline.Model = this.recline.Model || {};
       this.recordCount = null;
       this.queryState = new my.Query();
       this.queryState.bind("change facet:add", function () {
-        self.query(); // We want to call query() without any arguments.
+        // self.query(); // We want to call query() without any arguments.
       });
       // store is what we query and save against
       // store will either be the backend or be a memory store if Backend fetch
@@ -4826,11 +4826,11 @@ this.recline.View = this.recline.View || {};
 
       var model_fields = self.model.fields;
       var sql_query = this.jsQueryToSQL(query, model_fields);
-      this.extractFile(self, sql_query, format);
+      this.extractFile(self, sql_query, format, query);
     },
-    extractFile: function (self, sql_query, format) {
+    extractFile: function (self, sql_query, format, query={}) {
       var base_path = self.model.attributes.endpoint || self.options.site_url;
-      var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${escape(sql_query)}`; // USE BASE_PATH IN PRODUCTION
+      var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${escape(sql_query)}&resource_id=${query.resource_id}`; // USE BASE_PATH IN PRODUCTION
       self.progress();
 
       fetch(endpoint)
