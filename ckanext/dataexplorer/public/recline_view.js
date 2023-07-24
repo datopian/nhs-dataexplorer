@@ -213,11 +213,6 @@ this.ckan.module('recline_view', function (jQuery, _) {
           view: new recline.View.Graph({
             model: dataset
           })
-        },
-        {
-          id: 'map',
-          label: _('Map').fetch(),
-          view: new recline.View.Map(this._reclineMapViewOptions(dataset, map_config))
         }
       ];
 
