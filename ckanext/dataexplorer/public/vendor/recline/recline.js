@@ -4789,7 +4789,7 @@ this.recline.View = this.recline.View || {};
       setTimeout(() => {
         document.getElementById("download-format").innerHTML =
           DATASTORE_SEARCH_ROWS_MAX <= self.model.recordCount
-            ? '<option value="compressed-csv">Compressed CSV</option>'
+            ? '<option value="compressed-csv">Compressed CSV</option><option value="compressed-csv-zip">Compressed CSV Zip</option>'
             : '<option value="csv">CSV</option><option value="compressed-csv">Compressed CSV</option><option value="json">JSON</option>';
       }, 2000);
 
@@ -4830,7 +4830,7 @@ this.recline.View = this.recline.View || {};
     },
     extractFile: function (self, sql_query, format, query={}) {
       var base_path = self.model.attributes.endpoint || self.options.site_url;
-      var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${escape(sql_query)}&resource_id=${query.resource_id}`; // USE BASE_PATH IN PRODUCTION
+      var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${escape(sql_query)}&resource_id=${query.resource_id}&format=${format}`; // USE BASE_PATH IN PRODUCTION
       self.progress();
 
       fetch(endpoint)
