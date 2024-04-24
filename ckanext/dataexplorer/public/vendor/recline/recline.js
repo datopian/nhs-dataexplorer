@@ -4938,7 +4938,7 @@ this.recline.View = this.recline.View || {};
       <div class="modal" style="display: flex;">
       <div class="row">
         <div class="modal-content">
-          <p>An error occurred while extracting your requested data. If this error persists, please, send a report to nhsbsa.help@nhs.net</p>
+          <p>An error occurred while extracting your requested data. If this error persists, please, send a report to dataservicessupport@nhsbsa.nhs.uk</p>
           <button class="btn extract-button modal-btn" id="cancel-btn">Cancel</button>
         </div>
       </div>
