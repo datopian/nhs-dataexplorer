@@ -4790,11 +4790,10 @@ this.recline.View = this.recline.View || {};
         const downloadFormatElement = document.getElementById("download-format");
         const compressedOptions = `
           <option value="compressed-csv">Compressed CSV (GZIP)</option>
-          <option value="compressed-csv-zip">Compressed CSV (ZIP)</option>
         `;
         const regularOptions = `
           <option value="csv">CSV</option>
-          <option value="compressed-csv">Compressed CSV (GZIP)</option>
+          <option value="compressed-csv">Compressed CSV (ZIP)</option>
           <option value="json">JSON</option>
         `;
         
@@ -4802,7 +4801,7 @@ this.recline.View = this.recline.View || {};
           ? compressedOptions
           : regularOptions;
       }, 2000);
-      
+
       //Pre-Load helper libraries JSZip for zipping files
       $.getScript(
         "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"
