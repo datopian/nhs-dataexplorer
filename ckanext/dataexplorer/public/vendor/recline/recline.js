@@ -4787,12 +4787,22 @@ this.recline.View = this.recline.View || {};
       this.render();
       //Timeout of 2 seconds ensures that the form has been rendered before the select element is accessed
       setTimeout(() => {
-        document.getElementById("download-format").innerHTML =
-          DATASTORE_SEARCH_ROWS_MAX <= self.model.recordCount
-            ? '<option value="compressed-csv">Compressed CSV</option><option value="compressed-csv-zip">Compressed CSV Zip</option>'
-            : '<option value="csv">CSV</option><option value="compressed-csv">Compressed CSV</option><option value="json">JSON</option>';
+        const downloadFormatElement = document.getElementById("download-format");
+        const compressedOptions = `
+          <option value="compressed-csv">Compressed CSV (GZIP)</option>
+          <option value="compressed-csv-zip">Compressed CSV (ZIP)</option>
+        `;
+        const regularOptions = `
+          <option value="csv">CSV</option>
+          <option value="compressed-csv">Compressed CSV (GZIP)</option>
+          <option value="json">JSON</option>
+        `;
+        
+        downloadFormatElement.innerHTML = DATASTORE_SEARCH_ROWS_MAX <= self.model.recordCount
+          ? compressedOptions
+          : regularOptions;
       }, 2000);
-
+      
       //Pre-Load helper libraries JSZip for zipping files
       $.getScript(
         "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"
