@@ -4787,10 +4787,19 @@ this.recline.View = this.recline.View || {};
       this.render();
       //Timeout of 2 seconds ensures that the form has been rendered before the select element is accessed
       setTimeout(() => {
-        document.getElementById("download-format").innerHTML =
-          DATASTORE_SEARCH_ROWS_MAX <= self.model.recordCount
-            ? '<option value="compressed-csv">Compressed CSV</option>'
-            : '<option value="csv">CSV</option><option value="compressed-csv">Compressed CSV</option><option value="json">JSON</option>';
+        const downloadFormatElement = document.getElementById("download-format");
+        const compressedOptions = `
+          <option value="compressed-csv">Compressed CSV (GZIP)</option>
+        `;
+        const regularOptions = `
+          <option value="csv">CSV</option>
+          <option value="compressed-csv">Compressed CSV (ZIP)</option>
+          <option value="json">JSON</option>
+        `;
+        
+        downloadFormatElement.innerHTML = DATASTORE_SEARCH_ROWS_MAX <= self.model.recordCount
+          ? compressedOptions
+          : regularOptions;
       }, 2000);
 
       //Pre-Load helper libraries JSZip for zipping files
@@ -4830,7 +4839,7 @@ this.recline.View = this.recline.View || {};
     },
     extractFile: function (self, sql_query, format, query={}) {
       var base_path = self.model.attributes.endpoint || self.options.site_url;
-      var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${escape(sql_query)}&resource_id=${query.resource_id}`; // USE BASE_PATH IN PRODUCTION
+      var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${escape(sql_query)}&resource_id=${query.resource_id}&format=${format}`; // USE BASE_PATH IN PRODUCTION
       self.progress();
 
       fetch(endpoint)
@@ -4938,7 +4947,7 @@ this.recline.View = this.recline.View || {};
       <div class="modal" style="display: flex;">
       <div class="row">
         <div class="modal-content">
-          <p>An error occurred while extracting your requested data. If this error persists, please, send a report to nhsbsa.help@nhs.net</p>
+          <p>An error occurred while extracting your requested data. If this error persists, please, send a report to dataservicessupport@nhsbsa.nhs.uk</p>
           <button class="btn extract-button modal-btn" id="cancel-btn">Cancel</button>
         </div>
       </div>
