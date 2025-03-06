@@ -4839,7 +4839,7 @@ this.recline.View = this.recline.View || {};
     },
     extractFile: function (self, sql_query, format, query={}) {
       var base_path = self.model.attributes.endpoint || self.options.site_url;
-      var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${escape(sql_query)}&resource_id=${query.resource_id}&format=${format}`; // USE BASE_PATH IN PRODUCTION
+      var endpoint = `${base_path}/3/action/datastore_search_sql?sql=${encodeURIComponent(sql_query)}&resource_id=${query.resource_id}&format=${format}`; // USE BASE_PATH IN PRODUCTION
       self.progress();
 
       fetch(endpoint)
