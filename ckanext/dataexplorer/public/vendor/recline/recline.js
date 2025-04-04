@@ -861,10 +861,18 @@ this.recline.Model = this.recline.Model || {};
         return JSON.stringify(val);
       },
       number: function (val, field, doc) {
+        if (val === null || val === undefined) return '';
+        
         var format = field.get("format");
         if (format === "percentage") {
           return val + "%";
         }
+        
+        // For float values, preserve the exact representation
+        if (typeof val === 'number' && !Number.isInteger(val)) {
+          return val.toFixed(20).replace(/\.?0+$/, '').replace(/\.?0+e/, 'e');
+        }
+        
         return val;
       },
       string: function (val, field, doc) {
