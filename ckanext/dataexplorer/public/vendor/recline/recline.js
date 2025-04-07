@@ -868,24 +868,13 @@ this.recline.Model = this.recline.Model || {};
           return val + "%";
         }
         
-        if (typeof val === 'number' && !Number.isInteger(val) && doc && doc[field.id] !== undefined) {
-          // If the original value in the document is a string, use that for display
-          if (typeof doc[field.id] === 'string') {
-            return doc[field.id];
-          }
-          
-          // If it's already a number, we need to preserve decimal places
-          var originalStr = String(doc[field.id]);
-          var decimalParts = originalStr.split('.');
-          
-          if (decimalParts.length > 1) {
-            // Use toFixed with the original number of decimal places
-            return val.toFixed(decimalParts[1].length);
-          }
+        if (typeof val === 'number' && !Number.isInteger(val)) {
+          // Convert to string to preserve exact decimal places
+          return val.toString();
         }
         
         return val;
-      },            
+    },           
       string: function (val, field, doc) {
         var format = field.get("format");
         if (format === "markdown") {
