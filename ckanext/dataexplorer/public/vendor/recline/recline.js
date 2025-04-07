@@ -861,12 +861,20 @@ this.recline.Model = this.recline.Model || {};
         return JSON.stringify(val);
       },
       number: function (val, field, doc) {
+        if (val === null || val === undefined) return '';
+        
         var format = field.get("format");
         if (format === "percentage") {
           return val + "%";
         }
+        
+        if (typeof val === 'number' && !Number.isInteger(val) && doc && doc[field.id]) {
+          // Return the original document value without converting it
+          return doc[field.id];
+        }
+        
         return val;
-      },
+      },      
       string: function (val, field, doc) {
         var format = field.get("format");
         if (format === "markdown") {
