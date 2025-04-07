@@ -868,13 +868,13 @@ this.recline.Model = this.recline.Model || {};
           return val + "%";
         }
         
-        // For float values, preserve the exact representation
-        if (typeof val === 'number' && !Number.isInteger(val)) {
-          return val.toFixed(20).replace(/\.?0+$/, '').replace(/\.?0+e/, 'e');
+        if (typeof val === 'number' && !Number.isInteger(val) && doc && doc[field.id]) {
+          // Return the original document value without converting it
+          return doc[field.id];
         }
         
         return val;
-      },
+      },      
       string: function (val, field, doc) {
         var format = field.get("format");
         if (format === "markdown") {
