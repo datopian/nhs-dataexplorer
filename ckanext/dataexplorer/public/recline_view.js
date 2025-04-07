@@ -207,21 +207,13 @@ this.ckan.module('recline_view', function (jQuery, _) {
           view: new recline.View.SlickGrid({
             model: dataset
           })
-        }
-        /** NOT IN USE
-        ,{
+        },{
           id: 'graph',
           label: _('Graph').fetch(),
           view: new recline.View.Graph({
             model: dataset
           })
-        },
-        {
-          id: 'map',
-          label: _('Map').fetch(),
-          view: new recline.View.Map(this._reclineMapViewOptions(dataset, map_config))
         }
-        **/
       ];
 
       views = views.filter(function(view) {

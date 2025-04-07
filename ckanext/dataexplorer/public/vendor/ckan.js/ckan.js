@@ -157,6 +157,10 @@ if (isNodeModule) {
       offset: queryObj.from || 0,
       api_call_type: 'browser-data-explorer'
     };
+    if(queryObj?.filters?.length > 0){
+        actualQuery.api_call_type = 'browser-data-explorer-filter'
+    }
+
 
     if (queryObj.sort && queryObj.sort.length > 0) {
       var _tmp = _.map(queryObj.sort, function(sortObj) {
