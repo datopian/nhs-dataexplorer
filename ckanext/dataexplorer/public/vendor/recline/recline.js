@@ -868,9 +868,9 @@ this.recline.Model = this.recline.Model || {};
           return val + "%";
         }
         
-        if (typeof val === 'number' && !Number.isInteger(val)) {
-          // Convert to string to preserve exact decimal places
-          return val.toString();
+        if (typeof val === 'number' && !Number.isInteger(val) && doc && doc[field.id] !== undefined) {
+          // Convert the original value to string to preserve exact format
+          return String(doc[field.id]);
         }
         
         return val;
