@@ -868,10 +868,16 @@ this.recline.Model = this.recline.Model || {};
           return val + "%";
         }
         
-        if (typeof val === 'number' && !Number.isInteger(val) && doc && doc[field.id]) {
-          // Return the original document value without converting it
-          return doc[field.id];
-        }
+        if (typeof val === 'number' && !Number.isInteger(val)) {
+          // Get the original string representation to count decimal places
+          var originalStr = doc && doc[field.id] !== undefined ? String(doc[field.id]) : String(val);
+          var decimalParts = originalStr.split('.');
+          
+          if (decimalParts.length > 1) {
+            // Use toFixed with the original number of decimal places
+            return val.toFixed(decimalParts[1].length);
+          }
+        }      
         
         return val;
       },      
