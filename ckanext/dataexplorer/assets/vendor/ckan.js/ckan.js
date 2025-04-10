@@ -10,7 +10,7 @@ if (isNodeModule) {
 }
 
 (function(my) {
-  my.Client = function(endpoint, apiKey) { 
+  my.Client = function(endpoint, apiKey) {
     this.endpoint = _getEndpoint(endpoint);
     this.apiKey = apiKey;
   };
@@ -33,6 +33,12 @@ if (isNodeModule) {
     if (this.apiKey) {
       options.headers['X-CKAN-API-KEY'] = this.apiKey;
     }
+
+    // This shouldnt be done like this
+    const csrfToken = document.getElementById('csrf_token').value
+    if (csrfToken) {
+      options.headers['X-CSRF-TOKEN'] = csrfToken;
+    }
     var meth = isNodeModule ? _nodeRequest : _browserRequest;
     return meth(options, cb);
   }
@@ -45,19 +51,19 @@ if (isNodeModule) {
     this.action('datastore_search', actualQuery, function(err, results) {
       // map ckan types to our usual types ...
       var out = {}
-      if (results){
-          var fields = _.map(results.result.fields, function(field) {
-            field.type = field.type in my.ckan2JsonTableSchemaTypes ? my.ckan2JsonTableSchemaTypes[field.type] : field.type;
-            return field;
-          });
-          out = {
-            total: results.result.total,
-            fields: fields,
-            hits: results.result.records
-          };
-          cb(null, out);
+      if (results) {
+        var fields = _.map(results.result.fields, function(field) {
+          field.type = field.type in my.ckan2JsonTableSchemaTypes ? my.ckan2JsonTableSchemaTypes[field.type] : field.type;
+          return field;
+        });
+        out = {
+          total: results.result.total,
+          fields: fields,
+          hits: results.result.records
+        };
+        cb(null, out);
       }
-      else{
+      else {
         err = 'There are no views created for this resource yet.';
         cb(err, out);
       }
@@ -135,7 +141,7 @@ if (isNodeModule) {
         code: obj.status,
         message: obj.responseText
       }
-      cb(err); 
+      cb(err);
     }
     if (options.headers) {
       options.beforeSend = function(req) {
@@ -157,8 +163,8 @@ if (isNodeModule) {
       offset: queryObj.from || 0,
       api_call_type: 'browser-data-explorer'
     };
-    if(queryObj?.filters?.length > 0){
-        actualQuery.api_call_type = 'browser-data-explorer-filter'
+    if (queryObj?.filters?.length > 0) {
+      actualQuery.api_call_type = 'browser-data-explorer-filter'
     }
 
 
@@ -187,8 +193,8 @@ if (isNodeModule) {
     parts = url.split('/');
     var len = parts.length;
     return {
-      resource_id: parts[len-1],
-      endpoint: parts.slice(0,[len-4]).join('/') + '/api'
+      resource_id: parts[len - 1],
+      endpoint: parts.slice(0, [len - 4]).join('/') + '/api'
     };
   };
 }(CKAN));
@@ -227,7 +233,7 @@ recline.Backend.Ckan = recline.Backend.Ckan || {};
   var Deferred = _.isUndefined(this.jQuery) ? _.Deferred : jQuery.Deferred;
 
   // ### fetch
-  my.fetch = function(dataset) {
+  my.fetch = function(dataset, csrfToken) {
     var dfd = new Deferred()
     my.query({}, dataset)
       .done(function(data) {

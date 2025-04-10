@@ -8,7 +8,7 @@ except ImportError:
 import logging
 import json
 import csv
-import cStringIO
+from io import StringIO
 import codecs
 import zipfile
 
@@ -85,7 +85,7 @@ class UnicodeCSVWriter:
 
     def __init__(self, f, delimiter=',', encoding="utf-8", **kwds):
         # Redirect output to a queue
-        self.queue = cStringIO.StringIO()
+        self.queue = StringIO.StringIO()
         self.writer = csv.writer(self.queue, delimiter=delimiter, **kwds)
         self.stream = f
         self.encoder = codecs.getincrementalencoder(encoding)()
@@ -115,7 +115,7 @@ class ZipWriter():
 
     def __init__(self, delimiter=',', encoding="utf-8", **kwds):
         # Redirect output to a buffer
-        self.csv_buffer = cStringIO.StringIO()
+        self.csv_buffer = StringIO()
         self.writer = csv.writer(self.csv_buffer, delimiter=delimiter, **kwds)
         self.encoder = codecs.getincrementalencoder(encoding)()
 
@@ -214,7 +214,7 @@ class FileWriterService():
 
     def _xlsx_writer(self, columns, records, response, name):
 
-        output = cStringIO.StringIO()
+        output = StringIO()
 
         if hasattr(response, u'headers'):
             response.headers['Content-Type'] = (
@@ -262,7 +262,7 @@ class FileWriterService():
         for record in records:
             zip_writer.writerow([record[column] for column in columns])
 
-        zip_buffer = cStringIO.StringIO()
+        zip_buffer = StringIO()
         with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED, allowZip64=True) as zip_file:
             # Fetch UTF-8 output from the queue ...
             data = zip_writer.csv_buffer.getvalue()

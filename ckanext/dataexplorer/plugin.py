@@ -6,6 +6,9 @@ from ckan.common import json, config
 import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
 from ckan.lib.plugins import DefaultTranslation
+from flask import Blueprint
+
+from ckanext.dataexplorer.controllers.dataexplorer import dataexplorer_extract
 
 log = getLogger(__name__)
 ignore_empty = p.toolkit.get_validator('ignore_empty')
@@ -15,14 +18,29 @@ Invalid = p.toolkit.Invalid
 def get_datastore_search_rows_max():
     return config.get('ckan.datastore_search_rows_max', 0)
 
+def get_resource_fields(resource):
+    '''
+    Return a list of all datastore fields for a given resource, as long as
+    the datastore field type is in valid_field_types.
+    :param resource: resource dict
+    :type resource: dict
+    '''
+    data = {'resource_id': resource['id'], 'limit': 0}
+    result = toolkit.get_action('datastore_search')({}, { "resource_id": resource['bq_table_name']})
+    fields = [field['id'] for field in result.get('fields', [])]
+
+    return sorted(fields)
 
 def get_mapview_config():
     '''
     Extracts and returns map view configuration of the reclineview extension.
     '''
     namespace = 'ckanext.spatial.common_map.'
-    return dict([(k.replace(namespace, ''), v) for k, v in config.iteritems()
+    config_items = toolkit.config.items()
+    
+    return dict([(k.replace(namespace, ''), v) for k, v in config_items
                  if k.startswith(namespace)])
+
 
 
 def in_list(list_possible_values):
@@ -63,7 +81,7 @@ class ReclineViewBase(p.SingletonPlugin, DefaultTranslation):
     p.implements(p.IConfigurer, inherit=True)
     p.implements(p.IResourceView, inherit=True)
     p.implements(p.ITemplateHelpers, inherit=True)
-    p.implements(p.IRoutes, inherit=True)
+    p.implements(p.IBlueprint)
     p.implements(p.ITranslation)
 
     def update_config(self, config):
@@ -73,18 +91,22 @@ class ReclineViewBase(p.SingletonPlugin, DefaultTranslation):
         '''
         toolkit.add_public_directory(config, 'public')
         toolkit.add_template_directory(config, 'templates')
-        toolkit.add_resource('public', 'dataexplorer')
+        toolkit.add_resource("assets", "dataexplorer")
 
-    # IRoutes
+    # IBlueprint
+    def get_blueprint(self):
+        blueprint = Blueprint(
+            "dataexplorer", __name__, template_folder="templates", static_folder="static"
+        )
 
-    def before_map(self, map):
-        ctrl = 'ckanext.dataexplorer.controllers.dataexplorer:DataExplorer'
+        blueprint.add_url_rule(
+            "/dataexplorer/extract",
+            endpoint="extract",
+            view_func=dataexplorer_extract,
+            methods=["POST"],
+        )
 
-        map.connect('resource_extract',
-                    '/dataexplorer/extract',
-                    controller=ctrl,
-                    action='extract')
-        return map
+        return blueprint
 
     def can_view(self, data_dict):
         resource = data_dict['resource']
@@ -102,6 +124,7 @@ class ReclineViewBase(p.SingletonPlugin, DefaultTranslation):
         return {
             'get_map_config': get_mapview_config,
             'get_datastore_search_rows_max': get_datastore_search_rows_max,
+            'get_resource_fields': get_resource_fields,
 
         }
 

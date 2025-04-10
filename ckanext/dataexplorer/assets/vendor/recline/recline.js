@@ -21,6 +21,7 @@ this.recline.Backend.DataProxy = this.recline.Backend.DataProxy || {};
   //
   // Returns array of field names and array of arrays for records
   my.fetch = function(dataset) {
+    console.log('CSRF TOKEN RECLINE', this.options.csrfToken)
     var data = {
       url: dataset.url,
       "max-results": dataset.size || dataset.rows || 1000,
