@@ -25,11 +25,15 @@ def get_resource_fields(resource):
     :param resource: resource dict
     :type resource: dict
     '''
-    data = {'resource_id': resource['id'], 'limit': 0}
-    result = toolkit.get_action('datastore_search')({}, { "resource_id": resource['bq_table_name']})
-    fields = [field['id'] for field in result.get('fields', [])]
+    try:
+        data = {'resource_id': resource['id'], 'limit': 0}
+        result = toolkit.get_action('datastore_search')({}, { "resource_id": resource['bq_table_name']})
+        fields = [field['id'] for field in result.get('fields', [])]
 
-    return sorted(fields)
+        return sorted(fields)
+    except Exception as e:
+        log.error(e)
+        return []
 
 def get_mapview_config():
     '''

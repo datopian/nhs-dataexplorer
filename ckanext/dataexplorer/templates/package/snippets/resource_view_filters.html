@@ -1,3 +1,5 @@
+{% set resource_fields = h.get_resource_fields(resource) %}
+{% if resource_fields %}
 <div
   class="resource-view-filters"
   data-module="resource_view_filters_override"
@@ -5,4 +7,9 @@
   data-module-fields="{{ h.dump_json(h.get_resource_fields(resource)) }}"
   >
 </div>
+{% else %}
+<div class="resource-view-filters">
+  <p class="empty">{{ _('No fields to display') }}</p>
+</div>
+{% endif %}
 {% asset 'dataexplorer/dataexplorer-filters-override-js' %}
