@@ -1,22 +1,6 @@
 ckan.module('resource_view_filters_override', function(jQuery) {
   'use strict';
 
-  function safeDecode(str, maxIterations = 5) {
-    let prev = str, current = str;
-    let i = 0;
-    try {
-      do {
-        prev = current;
-        current = decodeURIComponent(prev);
-        i++;
-      } while (prev !== current && i < maxIterations);
-    } catch (e) {
-      return prev; // return last valid value
-    }
-    return current;
-  }
-
-  
   function initialize() {
     var self = this,
       resourceId = self.options.resourceId,
@@ -29,18 +13,20 @@ ckan.module('resource_view_filters_override', function(jQuery) {
     var urlParams = new URLSearchParams(window.location.search);
     var rawFilters = urlParams.get('filters');
     if (rawFilters) {
-      var decoded = safeDecode(rawFilters);
-      console.info('Decoded filters:', decoded);
-      try {
-        // Replace the param in URLSearchParams so CKAN sees it decoded
-        urlParams.set('filters', decoded);
-        window.history.replaceState({}, '', '?' + urlParams.toString());
-      } catch (e) {
-        console.warn('Failed to patch filters param:', e);
+      if (/%25[0-9A-Fa-f]{2}/.test(rawFilters)) {
+        var decodedOnce = decodeURIComponent(rawFilters); // one safe decode
+        console.info('Patched filters (decoded once):', decodedOnce);
+        try {
+          urlParams.set('filters', decodedOnce);
+          window.history.replaceState({}, '', '?' + urlParams.toString());
+        } catch (e) {
+          console.warn('Failed to patch filters param:', e);
+        }
+      } else {
+        console.info('Filters look fine, leaving as-is:', rawFilters);
       }
     }
-
-
+    
     var filters = ckan.views.filters.get();
     console.log('Final merged filters (canonical):', filters);
 
