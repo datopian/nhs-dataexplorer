@@ -81,6 +81,20 @@ ckan.module('resource_view_filters_override', function(jQuery) {
     // Merge URL filters with existing filters
     var filters = $.extend({}, existingFilters, urlFilters);
     console.log('Final merged filters:', filters);
+    
+    Object.keys(urlFilters).forEach(function(field) {
+      var values = urlFilters[field];
+      if (Array.isArray(values) && values.length) {
+        try { ckan.views.filters.set(field, values); } catch (e) { console.error(e); }
+      }
+    });
+    
+    // 2) Re-read to ensure we have the canonical structure CKAN will use
+    var filters = ckan.views.filters.get();
+    console.log('Final merged filters (canonical):', filters);
+
+    try { ckan.views.filters.trigger('change'); } catch (e) { console.error(e); }
+
 
     _appendDropdowns(filtersDiv, resourceId, dropdownTemplate, fields, filters);
     var addFilterButton = _buildAddFilterButton(self, filtersDiv, addFilterTemplate,
