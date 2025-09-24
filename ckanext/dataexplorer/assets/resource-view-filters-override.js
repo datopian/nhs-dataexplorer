@@ -93,7 +93,6 @@ ckan.module('resource_view_filters_override', function(jQuery) {
     var filters = ckan.views.filters.get();
     console.log('Final merged filters (canonical):', filters);
 
-    try { ckan.views.filters.trigger('change'); } catch (e) { console.error(e); }
 
 
     _appendDropdowns(filtersDiv, resourceId, dropdownTemplate, fields, filters);
