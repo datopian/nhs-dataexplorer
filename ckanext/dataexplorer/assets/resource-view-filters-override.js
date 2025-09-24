@@ -1,6 +1,23 @@
 ckan.module('resource_view_filters_override', function(jQuery) {
   'use strict';
 
+  // Safe multi-decode (stops if malformed)
+  function safeDecode(str, maxIterations = 5) {
+    let prev = str, current = str;
+    let i = 0;
+    try {
+      do {
+        prev = current;
+        current = decodeURIComponent(prev);
+        i++;
+      } while (prev !== current && i < maxIterations);
+    } catch (e) {
+      console.warn("Stopped decoding early:", e.message);
+      return prev; // return last good value
+    }
+    return current;
+  }
+
   function parseUrlFilters() {
     var urlParams = new URLSearchParams(window.location.search);
     var filtersParam = urlParams.get('filters');
@@ -8,24 +25,26 @@ ckan.module('resource_view_filters_override', function(jQuery) {
     
     if (filtersParam) {
       try {
-        // Handle double-encoding: decode twice if needed
-        var decodedParam = decodeURIComponent(filtersParam);
+        var decodedParam = safeDecode(filtersParam);
         
-        // Check if it's still encoded (contains %20, %25, etc.)
-        if (decodedParam.indexOf('%') !== -1) {
-          decodedParam = decodeURIComponent(decodedParam);
-        }
+        // Split into multiple filters (support both ; and , as separators)
+        var filterPairs = decodedParam.split(/[;,]/);
         
-        var parts = decodedParam.split(':');
+        filterPairs.forEach(function(pair) {
+          var parts = pair.split(':');
+          if (parts.length === 2) {
+            var fieldName = parts[0].trim();
+            var fieldValue = parts[1].trim();
+            
+            if (!filters[fieldName]) {
+              filters[fieldName] = [];
+            }
+            filters[fieldName].push(fieldValue);
+            
+            console.log('Parsed URL filter:', fieldName, '=', fieldValue);
+          }
+        });
         
-        if (parts.length === 2) {
-          var fieldName = parts[0];
-          var fieldValue = parts[1];
-          
-          filters[fieldName] = [fieldValue];
-          
-          console.log('Parsed URL filter:', fieldName, '=', fieldValue);
-        }
       } catch (e) {
         console.error('Error parsing URL filters:', e);
         console.log('Raw filters param:', filtersParam);
@@ -34,7 +53,7 @@ ckan.module('resource_view_filters_override', function(jQuery) {
     
     return filters;
   }
-
+  
   function initialize() {
     var self = this,
       resourceId = self.options.resourceId,
