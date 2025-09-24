@@ -1,6 +1,40 @@
 ckan.module('resource_view_filters_override', function(jQuery) {
   'use strict';
 
+  function parseUrlFilters() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var filtersParam = urlParams.get('filters');
+    var filters = {};
+    
+    if (filtersParam) {
+      try {
+        // Handle double-encoding: decode twice if needed
+        var decodedParam = decodeURIComponent(filtersParam);
+        
+        // Check if it's still encoded (contains %20, %25, etc.)
+        if (decodedParam.indexOf('%') !== -1) {
+          decodedParam = decodeURIComponent(decodedParam);
+        }
+        
+        var parts = decodedParam.split(':');
+        
+        if (parts.length === 2) {
+          var fieldName = parts[0];
+          var fieldValue = parts[1];
+          
+          filters[fieldName] = [fieldValue];
+          
+          console.log('Parsed URL filter:', fieldName, '=', fieldValue);
+        }
+      } catch (e) {
+        console.error('Error parsing URL filters:', e);
+        console.log('Raw filters param:', filtersParam);
+      }
+    }
+    
+    return filters;
+  }
+
   function initialize() {
     var self = this,
       resourceId = self.options.resourceId,
@@ -8,8 +42,19 @@ ckan.module('resource_view_filters_override', function(jQuery) {
       dropdownTemplate = self.options.dropdownTemplate,
       addFilterTemplate = '<a class="btn btn-primary btn-add-filter" href="#">' + self._('Add Filter') + '</a>',
       filtersDiv = $('<div class="resource-view-filters-container"></div>');
+    
 
-    var filters = ckan.views.filters.get();
+    console.log('URL search params:', window.location.search);
+    console.log('Current filters from ckan.views.filters.get():', ckan.views.filters.get());
+    
+    // Parse URL filters first, then get existing filters
+    var urlFilters = parseUrlFilters();
+    console.log('Parsed URL filters:', urlFilters);
+    var existingFilters = ckan.views.filters.get();
+    
+    // Merge URL filters with existing filters
+    var filters = $.extend({}, existingFilters, urlFilters);
+    console.log('Final merged filters:', filters);
 
     _appendDropdowns(filtersDiv, resourceId, dropdownTemplate, fields, filters);
     var addFilterButton = _buildAddFilterButton(self, filtersDiv, addFilterTemplate,
