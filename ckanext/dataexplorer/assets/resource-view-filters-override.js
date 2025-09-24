@@ -1,7 +1,6 @@
 ckan.module('resource_view_filters_override', function(jQuery) {
   'use strict';
 
-  // Safe multi-decode (stops if malformed)
   function safeDecode(str, maxIterations = 5) {
     let prev = str, current = str;
     let i = 0;
@@ -12,47 +11,11 @@ ckan.module('resource_view_filters_override', function(jQuery) {
         i++;
       } while (prev !== current && i < maxIterations);
     } catch (e) {
-      console.warn("Stopped decoding early:", e.message);
-      return prev; // return last good value
+      return prev; // return last valid value
     }
     return current;
   }
 
-  function parseUrlFilters() {
-    var urlParams = new URLSearchParams(window.location.search);
-    var filtersParam = urlParams.get('filters');
-    var filters = {};
-    
-    if (filtersParam) {
-      try {
-        var decodedParam = safeDecode(filtersParam);
-        
-        // Split into multiple filters (support both ; and , as separators)
-        var filterPairs = decodedParam.split(/[;,]/);
-        
-        filterPairs.forEach(function(pair) {
-          var parts = pair.split(':');
-          if (parts.length === 2) {
-            var fieldName = parts[0].trim();
-            var fieldValue = parts[1].trim();
-            
-            if (!filters[fieldName]) {
-              filters[fieldName] = [];
-            }
-            filters[fieldName].push(fieldValue);
-            
-            console.log('Parsed URL filter:', fieldName, '=', fieldValue);
-          }
-        });
-        
-      } catch (e) {
-        console.error('Error parsing URL filters:', e);
-        console.log('Raw filters param:', filtersParam);
-      }
-    }
-    
-    return filters;
-  }
   
   function initialize() {
     var self = this,
@@ -63,33 +26,21 @@ ckan.module('resource_view_filters_override', function(jQuery) {
       filtersDiv = $('<div class="resource-view-filters-container"></div>');
     
 
-    console.log('URL search params:', window.location.search);
-    
-    // Parse URL filters first, then get existing filters
-    var urlFilters = parseUrlFilters();
-    console.log('Parsed URL filters:', urlFilters);
-    
-    var existingFilters = {};
-    try {
-      existingFilters = ckan.views.filters.get();
-      console.log('Existing filters loaded successfully:', existingFilters);
-    } catch (e) {
-      console.error('Error loading existing filters (using URL filters only):', e);
-      existingFilters = {};
-    }
-    
-    // Merge URL filters with existing filters
-    var filters = $.extend({}, existingFilters, urlFilters);
-    console.log('Final merged filters:', filters);
-    
-    Object.keys(urlFilters).forEach(function(field) {
-      var values = urlFilters[field];
-      if (Array.isArray(values) && values.length) {
-        try { ckan.views.filters.set(field, values); } catch (e) { console.error(e); }
+    var urlParams = new URLSearchParams(window.location.search);
+    var rawFilters = urlParams.get('filters');
+    if (rawFilters) {
+      var decoded = safeDecode(rawFilters);
+      console.info('Decoded filters:', decoded);
+      try {
+        // Replace the param in URLSearchParams so CKAN sees it decoded
+        urlParams.set('filters', decoded);
+        window.history.replaceState({}, '', '?' + urlParams.toString());
+      } catch (e) {
+        console.warn('Failed to patch filters param:', e);
       }
-    });
-    
-    // 2) Re-read to ensure we have the canonical structure CKAN will use
+    }
+
+
     var filters = ckan.views.filters.get();
     console.log('Final merged filters (canonical):', filters);
 
