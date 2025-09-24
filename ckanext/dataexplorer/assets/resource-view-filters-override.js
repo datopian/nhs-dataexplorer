@@ -45,12 +45,19 @@ ckan.module('resource_view_filters_override', function(jQuery) {
     
 
     console.log('URL search params:', window.location.search);
-    console.log('Current filters from ckan.views.filters.get():', ckan.views.filters.get());
     
     // Parse URL filters first, then get existing filters
     var urlFilters = parseUrlFilters();
     console.log('Parsed URL filters:', urlFilters);
-    var existingFilters = ckan.views.filters.get();
+    
+    var existingFilters = {};
+    try {
+      existingFilters = ckan.views.filters.get();
+      console.log('Existing filters loaded successfully:', existingFilters);
+    } catch (e) {
+      console.error('Error loading existing filters (using URL filters only):', e);
+      existingFilters = {};
+    }
     
     // Merge URL filters with existing filters
     var filters = $.extend({}, existingFilters, urlFilters);
