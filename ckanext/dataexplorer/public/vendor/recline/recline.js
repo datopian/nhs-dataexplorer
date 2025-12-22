@@ -5045,7 +5045,11 @@ this.recline.View = this.recline.View || {};
             if (this.get_field_type(key, value_item, model_fields) == "num") {
               single_where_statament += `${key} = ${value_item} OR `;
             } else {
-              single_where_statament += `${key} = "${value_item}" OR `;
+              if (value_item === "") {
+                single_where_statament += `(${key} IS NULL OR ${key} = "") OR `;
+              } else {
+                single_where_statament += `${key} = "${value_item}" OR `;
+              }
             }
           });
           where_filters += `(${single_where_statament.slice(0, -3)}) AND `;
@@ -5060,12 +5064,12 @@ this.recline.View = this.recline.View || {};
           if (this.get_field_type(key, value, model_fields) == "string") {
             where_q_str += ` LOWER(${key}) like LOWER("${value.slice(
               0,
-              -2,
+              -2
             )}%") `;
           } else {
             where_q_str += ` CAST(${key} as STRING)  like "${value.slice(
               0,
-              -2,
+              -2
             )}% `;
           }
           where_q += where_q_str;
@@ -5074,9 +5078,9 @@ this.recline.View = this.recline.View || {};
       }
       return where_str;
     },
-    get_field_type: function (key, value, model_fields) {
-      var string_types = ["string", "STRING"];
-      var type = model_fields.get(key).attributes.type;
+    get_field_type: function(key, value, model_fields) {
+      var string_types = ["string", "STRING", "text"]
+      var type = model_fields.get(key).attributes.type
 
       if (string_types.includes(type)) {
         return "string";
