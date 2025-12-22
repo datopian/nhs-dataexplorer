@@ -16,15 +16,10 @@ ckan.module('resource_view_filters_override', function(jQuery) {
     if (rawFilters) {
       try {
         if (/%25[0-9A-Fa-f]{2}/.test(rawFilters)) {
-          // Looks double-encoded → decode once, then re-encode clean
           var decodedOnce = decodeURIComponent(rawFilters);
           var normalized = encodeURIComponent(decodedOnce);
           urlParams.set('filters', normalized);
           window.history.replaceState({}, '', '?' + urlParams.toString());
-          console.info('Patched filters (normalized):', normalized);
-        } else {
-          // Already looks fine, just log
-          console.info('Filters look fine, leaving as-is:', rawFilters);
         }
       } catch (e) {
         console.warn('Failed to patch filters param:', e);
