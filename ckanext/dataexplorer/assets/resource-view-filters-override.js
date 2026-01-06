@@ -28,7 +28,6 @@ ckan.module('resource_view_filters_override', function(jQuery) {
     
 
     var filters = ckan.views.filters.get();
-    console.log('Final merged filters (canonical):', filters);
 
 
 
@@ -104,8 +103,6 @@ ckan.module('resource_view_filters_override', function(jQuery) {
           addFilterInput = addFilterDiv.find('input');
         el.append(addFilterDiv);
 
-        console.log('ADD FILETR INPUT', addFilterInput)
-
         // TODO: Remove element from "data" when some select selects it.
         try {
           addFilterInput.select2({
@@ -114,8 +111,7 @@ ckan.module('resource_view_filters_override', function(jQuery) {
           }).on('change', onChangeCallback);
 
         } catch (e) {
-          console.log(e)
-          console.error('Select2 not loaded');
+          console.error('Select2 not loaded', e);
         }
       }
       evt.preventDefault();
@@ -146,7 +142,12 @@ ckan.module('resource_view_filters_override', function(jQuery) {
       theseFilters.forEach(function(value, i) {
         var dropdown = $('<input type="hidden" name="' + filterName + '"></input>');
         if (value !== undefined) {
-          dropdown.val(value);
+          // If value is empty string, use placeholder so Select2 calls initSelection
+          if (value === '') {
+            dropdown.val('__EMPTY__');
+          } else {
+            dropdown.val(value);
+          }
         }
         dropdowns.append(dropdown);
       });
@@ -206,7 +207,10 @@ ckan.module('resource_view_filters_override', function(jQuery) {
           }
         },
         initSelection: function(element, callback) {
-          var data = { id: element.val(), text: element.val() };
+          var val = element.val();
+          // Show "(Blank)" for empty values instead of empty string
+          var displayText = (val === '' || val === null || val === undefined || val === '__EMPTY__') ? '(Blank)' : val;
+          var data = { id: val, text: displayText };
           callback(data);
         },
       }).on('change', _onChange);
