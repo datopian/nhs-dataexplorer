@@ -195,7 +195,11 @@ ckan.module('resource_view_filters_override', function(jQuery) {
               results;
 
             results = $.map(records, function(record) {
-              return { id: record[filterName], text: String(record[filterName]) };
+              var val = record[filterName];
+              if (val === '' || val === null || val === undefined) {
+                return { id: '__EMPTY__', text: '(Blank)' };
+              }
+              return { id: val, text: String(val) };
             });
 
             return { results: results, more: hasMore };
@@ -219,17 +223,22 @@ ckan.module('resource_view_filters_override', function(jQuery) {
   }
 
   function _onChange(evt) {
-
     var filterName = evt.currentTarget.name,
       filterValue = evt.val,
       currentFilters = ckan.views.filters.get(filterName) || [],
       addToIndex = currentFilters.length;
 
+    // Convert __EMPTY__ placeholder back to actual empty string
+    if (filterValue === '__EMPTY__') {
+      filterValue = '';
+    }
+
     // Make sure we're not editing the original array, but a copy.
     currentFilters = currentFilters.slice();
 
     if (evt.removed) {
-      addToIndex = currentFilters.indexOf(evt.removed.id);
+      var removedId = evt.removed.id === '__EMPTY__' ? '' : evt.removed.id;
+      addToIndex = currentFilters.indexOf(removedId);
       if (addToIndex !== -1) {
         currentFilters.splice(addToIndex, 1);
       }
@@ -238,6 +247,8 @@ ckan.module('resource_view_filters_override', function(jQuery) {
       currentFilters.splice(addToIndex, 0, filterValue);
     }
 
+
+    // Set filters - includes empty string as a valid filter value
     if (currentFilters.length > 0) {
       ckan.views.filters.set(filterName, currentFilters);
     } else {
