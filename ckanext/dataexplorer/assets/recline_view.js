@@ -1,4 +1,40 @@
 this.ckan.module('recline_view', function(jQuery, _) {
+  function getFiltersFromQueryString(queryString) {
+    var rawFilters = new URLSearchParams(queryString || '').get('filters');
+    var filters = {};
+    var parsedFilters = rawFilters;
+
+    if (!rawFilters) {
+      return filters;
+    }
+
+    try {
+      if (
+        parsedFilters.indexOf(':') === -1 &&
+        parsedFilters.indexOf('|') === -1 &&
+        /%3A|%7C/i.test(parsedFilters)
+      ) {
+        parsedFilters = decodeURIComponent(parsedFilters);
+      }
+    } catch (e) {}
+
+    parsedFilters.split('|').forEach(function(fieldValueStr) {
+      var fieldValue = fieldValueStr.match(/([^:]+):(.*)/);
+
+      if (!fieldValue) {
+        return;
+      }
+
+      var field = fieldValue[1];
+      var value = fieldValue[2];
+
+      filters[field] = filters[field] || [];
+      filters[field].push(value);
+    });
+
+    return filters;
+  }
+
   return {
     options: {
       site_url: "",
@@ -73,14 +109,15 @@ this.ckan.module('recline_view', function(jQuery, _) {
       query.set({ size: reclineView.limit || 100 });
       query.set({ from: reclineView.offset || 0 });
 
-      var urlFilters = {};
+      var iframeFilters = getFiltersFromQueryString(window.location.search);
+      var parentFilters = {};
       try {
         if (window.parent.ckan.views && window.parent.ckan.views.filters) {
-          urlFilters = window.parent.ckan.views.filters.get();
+          parentFilters = window.parent.ckan.views.filters.get();
         }
       } catch (e) { }
       var defaultFilters = reclineView.filters || {},
-        filters = jQuery.extend({}, defaultFilters, urlFilters);
+        filters = jQuery.extend({}, defaultFilters, iframeFilters, parentFilters);
       jQuery.each(filters, function(field, values) {
         query.addFilter({ type: 'term', field: field, term: values });
       });
