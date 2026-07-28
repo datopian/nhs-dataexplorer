@@ -10,20 +10,15 @@ ckan.module('resource_view_filters_override', function(jQuery) {
       filtersDiv = $('<div class="resource-view-filters-container"></div>');
     
 
-    var urlParams = new URLSearchParams(window.location.search);
-    var rawFilters = urlParams.get('filters');
-    
-    if (rawFilters) {
-      try {
-        if (/%25[0-9A-Fa-f]{2}/.test(rawFilters)) {
-          var decodedOnce = decodeURIComponent(rawFilters);
-          var normalized = encodeURIComponent(decodedOnce);
-          urlParams.set('filters', normalized);
-          window.history.replaceState({}, '', '?' + urlParams.toString());
-        }
-      } catch (e) {
-        console.warn('Failed to patch filters param:', e);
-      }
+    var url = new URL(window.location.href);
+
+    if (url.searchParams.has('filters')) {
+      url.searchParams.delete('filters');
+      window.history.replaceState(
+        window.history.state,
+        '',
+        url.pathname + url.search + url.hash
+      );
     }
     
 
@@ -278,4 +273,3 @@ ckan.module('resource_view_filters_override', function(jQuery) {
     }
   };
 });
-
