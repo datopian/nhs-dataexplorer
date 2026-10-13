@@ -1,27 +1,3 @@
-(function() {
-  'use strict';
-
-  window.addEventListener('pageshow', function(event) {
-    var navigation = window.performance && window.performance.getEntriesByType
-      ? window.performance.getEntriesByType('navigation')[0]
-      : null;
-    var isHistoryNavigation = event.persisted ||
-      (navigation && navigation.type === 'back_forward');
-
-    if (!isHistoryNavigation) {
-      return;
-    }
-
-    var url = new URL(window.location.href);
-    if (url.searchParams.has('filters')) {
-      url.searchParams.delete('filters');
-      // Reload the clean URL so CKAN's filter state, controls and iframe data
-      // are reset together, without adding another history entry.
-      window.location.replace(url.pathname + url.search + url.hash);
-    }
-  });
-})();
-
 ckan.module('resource_view_filters_override', function(jQuery) {
   'use strict';
 
@@ -32,6 +8,23 @@ ckan.module('resource_view_filters_override', function(jQuery) {
       dropdownTemplate = self.options.dropdownTemplate,
       addFilterTemplate = '<a class="btn btn-primary btn-add-filter" href="#">' + self._('Add Filter') + '</a>',
       filtersDiv = $('<div class="resource-view-filters-container"></div>');
+    
+
+    var urlParams = new URLSearchParams(window.location.search);
+    var rawFilters = urlParams.get('filters');
+    
+    if (rawFilters) {
+      try {
+        if (/%25[0-9A-Fa-f]{2}/.test(rawFilters)) {
+          var decodedOnce = decodeURIComponent(rawFilters);
+          var normalized = encodeURIComponent(decodedOnce);
+          urlParams.set('filters', normalized);
+          window.history.replaceState({}, '', '?' + urlParams.toString());
+        }
+      } catch (e) {
+        console.warn('Failed to patch filters param:', e);
+      }
+    }
     
 
     var filters = ckan.views.filters.get();
@@ -285,3 +278,4 @@ ckan.module('resource_view_filters_override', function(jQuery) {
     }
   };
 });
+
